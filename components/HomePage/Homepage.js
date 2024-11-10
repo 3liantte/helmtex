@@ -12,7 +12,6 @@ const HomePage = () => {
         <h1 className="text-md sm:text-lg md:text-2xl font-light uppercase tracking-wider animate-fade-in-up">Welcome to</h1>
         <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold my-2 sm:my-4 animate-fade-in-up-delayed">Helm Textile Mills</h2>
         <h3 className="text-lg sm:text-xl md:text-3xl font-light tracking-wide animate-fade-in-up-delay-more">SA's Leading Textile Company</h3>
-        <Button className="mt-6 sm:mt-8 px-4 sm:px-6 py-2 text-md sm:text-lg font-semibold hover:bg-blue-800 transition duration-300 animate-fade-in-up-delay-more">About</Button>
       </div>
     </div>
   );
