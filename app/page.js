@@ -8,7 +8,7 @@ import WelcomePage from "@/components/HomePage/Welcomepage";
 export default function Home() {
   return (
       <>
-       <div className="bg-blue-200 w-full h-screen">
+       <div className="bg-white w-full h-screen">
         <WelcomePage/>
         <InfoSection/>
         <ProductCarousel/>
