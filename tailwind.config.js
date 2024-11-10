@@ -79,8 +79,5 @@ module.exports = {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate","flowbite/plugin")],
-  content: [
-	"./node_modules/flowbite/**/*.js"
-],
+  plugins: [require("tailwindcss-animate")],
 };
