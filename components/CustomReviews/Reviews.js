@@ -16,8 +16,8 @@ const Reviews = () => {
           <div className="flex flex-col sm:flex-row justify-center gap-8 items-center">
             {reviews.map((review, index) => (
               <div key={index} className="bg-white shadow-lg p-6 rounded-lg w-full sm:w-80 md:w-1/3 lg:w-1/4">
-                <p className="italic text-gray-700">"{review.text}"</p>
-                <p className="text-right font-semibold text-gray-800 mt-4">- {review.author}</p>
+                <p className="italic text-gray-700">{review.text}</p>
+                <p className="text-right font-semibold text-gray-800 mt-4"> {review.author}</p>
               </div>
             ))}
           </div>
