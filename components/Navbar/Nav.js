@@ -21,7 +21,7 @@ const Nav = () => {
     };
 
     return (
-        <div className="shadow-md w-full fixed top-0 left-0 z-10 bg-inherit z-40">
+        <div className="shadow-md w-full fixed top-0 left-0 bg-inherit z-40">
             <div className="md:flex items-center justify-between py-4 md:px-10 px-7">
                 <div className="flex items-center justify-between">
                     <div className="font-extrabold text-2xl cursor-pointer">
