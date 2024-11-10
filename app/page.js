@@ -1,15 +1,19 @@
 import React from "react";
-import Nav from "@/components/Navbar/Nav";
-import HomePage from "@/components/HomePage/Homepage";
 import InfoSection from "@/components/InfoSection/InfoSection";
+import ProductCarousel from "@/components/ProductCarousel/ProductCarousel";
+import Reviews from "@/components/CustomReviews/Reviews";
+import Footer from "@/components/Footer/Footer";
+import WelcomePage from "@/components/HomePage/Welcomepage";
 
 export default function Home() {
   return (
       <>
-       <Nav/>
        <div className="bg-blue-200 w-full h-screen">
-        <HomePage/>
+        <WelcomePage/>
         <InfoSection/>
+        <ProductCarousel/>
+        <Reviews/>
+        <Footer/>
        </div>
       </>
   );
