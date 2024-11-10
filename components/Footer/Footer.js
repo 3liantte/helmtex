@@ -54,7 +54,7 @@ const Footer = () => {
             <Image
               src={HelmLogo}
               alt="Helm Logo"
-              className="w-full max-w-[200px]"
+              className="w-full max-w-[600px]"
             />
           </div>
         </div>
