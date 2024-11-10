@@ -10,7 +10,7 @@ const WelcomePage = () => {
         <h3 className="text-lg sm:text-xl md:text-3xl font-light tracking-wide animate-fade-in-up-delay-more">SA&apos;s Leading Textile Company</h3>
       </div>
     </div>
-  );
+  )
 };
 
 export default WelcomePage;
