@@ -55,6 +55,8 @@ const Footer = () => {
               src={HelmLogo}
               alt="Helm Logo"
               className="w-full max-w-[600px]"
+              priority={true}
+              quality={100}
             />
           </div>
         </div>

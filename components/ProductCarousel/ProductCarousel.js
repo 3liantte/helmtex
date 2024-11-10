@@ -110,6 +110,8 @@ function ProductCarousel() {
             className="w-full h-48 object-cover rounded-lg"
             width={200}
             height={200}
+            priority={true}
+            quality={100}
           />
           <div className="p-2">
             <p className="text-sm text-gray-400">{ranges[previousIndex].title}</p>
@@ -124,6 +126,8 @@ function ProductCarousel() {
             className="w-full h-64 sm:h-80 object-cover rounded-t-lg"
             width={800}
             height={400}
+            priority={true}
+            quality={100}
           />
           <div className="p-4">
             <p className="text-sm text-gray-500">{ranges[currentIndex].capacity}</p>
@@ -140,6 +144,8 @@ function ProductCarousel() {
             className="w-full h-48 object-cover rounded-lg"
             width={200}
             height={200}
+            priority={true}
+            quality={100}
           />
           <div className="p-2">
             <p className="text-sm text-gray-400">{ranges[nextIndex].title}</p>

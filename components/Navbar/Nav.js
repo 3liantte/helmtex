@@ -29,6 +29,8 @@ const Nav = () => {
                             src={HelmLogo}
                             alt="Helm logo"
                             className="w-24"
+                            priority={true}
+                            quality={100}
                         />
                     </div>
                     <Button

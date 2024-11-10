@@ -79,7 +79,8 @@ const InfoSection = () => {
                             width={600}
                             height={600}
                             className="w-full h-auto object-contain rounded-lg" 
-                            priority // For faster loading of carousel images
+                            priority={true}
+                            quality={100}
                         />
                     </CardContent>
                   </Card>
