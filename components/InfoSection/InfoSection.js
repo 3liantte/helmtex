@@ -43,24 +43,24 @@ const InfoSection = () => {
         <p className="text-lg text-gray-600 italic mb-6">
           Write a paragraph that talks about your brand or property here. 
           Convince your prospective clients to choose you and your offerings by highlighting the qualities that set you apart from the competition. 
-          Your audience is already on your website, so push a little bit harder to seal the deal!
+          Your audience is already on your website&apos; so push a little bit harder to seal the deal!
         </p>
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam accumsan, odio vel mattis consectetur, 
-            libero sem viverra eros, vitae vestibulum tortor dui ut eros. Aenean porta volutpat nulla vitae commodo. 
-            Sed viverra nulla viverra convallis egestas. Duis malesuada eget elit et iaculis. Nulla lacus nisl, dapibus vitae nisl ut, 
+            Lorem ipsum dolor sit amet&apos; consectetur adipiscing elit. Nam accumsan&apos; odio vel mattis consectetur&apos; 
+            libero sem viverra eros&apos; vitae vestibulum tortor dui ut eros. Aenean porta volutpat nulla vitae commodo. 
+            Sed viverra nulla viverra convallis egestas. Duis malesuada eget elit et iaculis. Nulla lacus nisl&apos; dapibus vitae nisl ut&apos; 
             consequat luctus ligula. Nullam imperdiet velit id mi tempor congue. Mauris at molestie lorem. Aliquam commodo feugiat fermentum. 
-            Duis et ante pretium, dignissim dui posuere, facilisis tellus. Proin cursus finibus elementum. Sed in ante ullamcorper, euismod metus ut, 
-            lobortis tortor. Mauris tempus magna vel pellentesque sollicitudin. Quisque tincidunt, augue vel elementum ornare, dolor eros commodo purus, 
+            Duis et ante pretium&apos; dignissim dui posuere&apos; facilisis tellus. Proin cursus finibus elementum. Sed in ante ullamcorper&apos; euismod metus ut&apos; 
+            lobortis tortor. Mauris tempus magna vel pellentesque sollicitudin. Quisque tincidunt&apos; augue vel elementum ornare&apos; dolor eros commodo purus&apos; 
             vel fermentum purus dui vitae lectus. Mauris eget malesuada quam.
         </p>
             <br />
         <p>
-            Nam neque purus, elementum non enim at, pharetra volutpat leo. Orci varius natoque penatibus et magnis dis parturient montes, 
-            ascetur ridiculus mus. Sed quis massa gravida, volutpat eros eget, tristique ligula. Nunc rhoncus condimentum lectus in aliquam. Mauris tincidunt 
-            semper felis eu lobortis. Vestibulum dignissim nec lacus vitae fermentum. Curabitur congue interdum metus, non consectetur dolor egestas eleifend. 
-            Sed facilisis ornare nibh quis posuere. Integer imperdiet, massa at venenatis ornare, massa augue faucibus nisi, vitae iaculis ipsum lectus vel tellus. 
-            Praesent vulputate velit magna, ut scelerisque orci auctor eu. Maecenas at lectus ante.
+            Nam neque purus&apos; elementum non enim at&apos; pharetra volutpat leo. Orci varius natoque penatibus et magnis dis parturient montes&apos; 
+            ascetur ridiculus mus. Sed quis massa gravida&apos; volutpat eros eget&apos; tristique ligula. Nunc rhoncus condimentum lectus in aliquam. Mauris tincidunt 
+            semper felis eu lobortis. Vestibulum dignissim nec lacus vitae fermentum. Curabitur congue interdum metus&apos; non consectetur dolor egestas eleifend. 
+            Sed facilisis ornare nibh quis posuere. Integer imperdiet&apos; massa at venenatis ornare&apos; massa augue faucibus nisi&apos; vitae iaculis ipsum lectus vel tellus. 
+            Praesent vulputate velit magna&apos; ut scelerisque orci auctor eu. Maecenas at lectus ante.
         </p>
       </div>
 
