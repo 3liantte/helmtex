@@ -1,9 +1,10 @@
+import Products from '@/components/ProductCard/Products'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>
-      This is products
+    <div className="p-24">
+      <Products/>
     </div>
   )
 }
