@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
+import { Button } from '../ui/button';
 
 const ContactUs = () => {
   const [location, setLocation] = useState({ latitude: null, longitude: null });
@@ -26,9 +27,8 @@ const ContactUs = () => {
 
   // Construct the Google Maps URL with the current location
   const googleMapsUrl = location.latitude && location.longitude
-    ? `https://www.google.com/maps/embed/v1/view?key=YOUR_GOOGLE_MAPS_API_KEY&center=${location.latitude},${location.longitude}&zoom=14`
-    : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.2364553909536!2d-122.41941568468166!3d37.77492927975983!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064b8e5e4b9%3A0x6e09b6e6b113d7f1!2sSan%20Francisco%2C%20CA%2C%20USA!5e0!3m2!1sen!2sus!4v1619498050912!5m2!1sen!2sus`;
-
+  ? `https://www.google.com/maps/embed/v1/view?key=AIzaSyAE6_ve6CktXtftQ7j2oUxbHIhb0DiTl2w&center=${location.latitude},${location.longitude}&zoom=14`
+  : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.2364553909536!2d-122.41941568468166!3d37.77492927975983!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064b8e5e4b9%3A0x6e09b6e6b113d7f1!2sSan%20Francisco%2C%20CA%2C%20USA!5e0!3m2!1sen!2sus!4v1619498050912!5m2!1sen!2sus";
   return (
     <div className="bg-gray-900 text-white min-h-screen font-sans">
       {/* Header Section */}
@@ -62,7 +62,7 @@ const ContactUs = () => {
               placeholder="Type Here..."
               rows="4"
               className="p-3 bg-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            ></textarea>
+            />
             <button
               type="submit"
               className="mt-4 bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg transition duration-300"
@@ -104,7 +104,7 @@ const ContactUs = () => {
             src={googleMapsUrl}
             allowFullScreen=""
             loading="lazy"
-          ></iframe>
+          />
         </div>
       </div>
 
@@ -113,9 +113,9 @@ const ContactUs = () => {
         <div className="text-center">
           <h2 className="text-3xl font-semibold">We Are Always Ready To Take A Perfect Shot</h2>
           <p className="mt-4 text-gray-400">Hire us now and let’s capture your vision perfectly!</p>
-          <button className="mt-6 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
+          <Button className="mt-6 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
             Hire Us Now
-          </button>
+          </Button>
         </div>
       </div>
     </div>
