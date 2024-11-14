@@ -45,8 +45,8 @@ const Nav = () => {
                         isOpen ? 'top-16' : 'top-[-490px]'
                     }`}
                 >
-                    {Links.map((link, index) => (
-                        <li key={index} className="md:ml-8 text-lg md:my-0 my-4">
+                    {Links.map((link, i) => (
+                        <li key={i} className="md:ml-8 text-lg md:my-0 my-4">
                             <a
                                 href={link.link}
                                 className="text-gray-800 hover:text-blue-700 transition duration-300"
