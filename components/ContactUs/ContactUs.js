@@ -27,7 +27,7 @@ const ContactUs = () => {
 
   // Construct the Google Maps URL with the current location
   const googleMapsUrl = location.latitude && location.longitude
-  ? `https://www.google.com/maps/embed/v1/view?key=AIzaSyAE6_ve6CktXtftQ7j2oUxbHIhb0DiTl2w&center=${location.latitude},${location.longitude}&zoom=14`
+  ? `https://www.google.com/maps/embed/v1/view?key=(API Key)&center=${location.latitude},${location.longitude}&zoom=14`
   : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.2364553909536!2d-122.41941568468166!3d37.77492927975983!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064b8e5e4b9%3A0x6e09b6e6b113d7f1!2sSan%20Francisco%2C%20CA%2C%20USA!5e0!3m2!1sen!2sus!4v1619498050912!5m2!1sen!2sus";
   return (
     <div className="bg-gray-900 text-white min-h-screen font-sans">
