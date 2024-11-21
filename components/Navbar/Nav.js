@@ -46,6 +46,7 @@ const Nav = () => {
                     }`}
                 >
                     {Links.map((link, i) => (
+                        // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                         <li key={i} className="md:ml-8 text-lg md:my-0 my-4">
                             <a
                                 href={link.link}
