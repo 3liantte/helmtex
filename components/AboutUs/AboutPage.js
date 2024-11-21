@@ -217,7 +217,7 @@ const AboutPage = () => {
             />
             <div className="absolute bottom-0 left-0 bg-white shadow-md p-4 rounded-lg">
               <p className="italic text-gray-600">
-                "We weave the fabric of innovation, where quality, craftsmanship, and sustainability meet to create timeless textiles."
+                &apos;&apos;We weave the fabric of innovation, where quality, craftsmanship, and sustainability meet to create timeless textiles.&apos;&apos; 
               </p>
               <p className="mt-2 text-gray-800 font-bold">Wilhelm L.</p>
             </div>
