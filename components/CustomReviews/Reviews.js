@@ -1,7 +1,7 @@
 import React from 'react';
 
 const reviews = [
-  { text: "Boost your product and service's credibility by adding testimonials from your clients. People love recommendations so feedback from others who've tried it is invaluable.", author: "Santa Solana Post" },
+  { text: "Helm Textile Mills has been a game-changer for our business. Their commitment to quality and timely delivery has exceeded our expectations. The fabrics we source from them are top-notch and have significantly improved our product line. We couldn't ask for a better partner in the textile industry!", author: " Emily R., Fashion Designer" },
   { text: "Boost your product and service's credibility by adding testimonials from your clients. People love recommendations so feedback from others who've tried it is invaluable.", author: "Mariana's Luxe Travels" },
   { text: "Boost your product and service's credibility by adding testimonials from your clients. People love recommendations so feedback from others who've tried it is invaluable.", author: "Fairhill Journal" },
 ];

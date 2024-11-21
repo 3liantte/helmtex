@@ -95,3 +95,41 @@ body {
     @apply bg-background text-foreground;
   }
 }
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+
+}
+
+.animate-marquee {
+  animation: marquee 100s linear infinite;
+}
+
+.pause-marquee {
+  animation-play-state: paused;
+}
+
+.marquee-wrapper {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+}
+
+.marquee-content {
+  display: flex;
+  animation: marquee 20s linear infinite;
+}
+
+.marquee-content.paused {
+  animation-play-state: paused;
+}
