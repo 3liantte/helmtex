@@ -9,7 +9,7 @@ const ProductCard = ({ id, title, imageUrl, collectionId }) => {
     const router = useRouter();
 
     const handleDetailsClick = () => {
-        router.push(`/products/${collectionId}/product/${id}`);
+        router.push(`/${id}`);
     };
 
     return (

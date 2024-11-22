@@ -12,6 +12,7 @@ const Nav = () => {
         { name: "Home", link: "/" },
         { name: "About", link: "/about" },
         { name: "Products", link: "/products" },
+        { name: "Blog", link: "/blog" },
         { name: "Contact Us", link: "/contacts" },
         { name: "FAQ", link: "/faq" },
     ];

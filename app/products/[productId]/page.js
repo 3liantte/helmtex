@@ -2,8 +2,9 @@
 import React from 'react';
 import { collections } from '@/components/ProductCard/Collection/data';
 import { notFound } from 'next/navigation';
+import ProductCard from '@/components/ProductCard/ProductCard';
 
-const ProductPage = ({ params }) => {
+const page = ({ params }) => {
     const { collectionId, productId } = params;
     const collection = collections.find((c) => c.id === collectionId);
 
@@ -35,4 +36,4 @@ const ProductPage = ({ params }) => {
     );
 };
 
-export default ProductPage;
+export default page;

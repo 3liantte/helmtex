@@ -1,37 +1,12 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"; 
-import { Card, CardContent } from "@/components/ui/card";
-import useEmblaCarousel from 'embla-carousel-react'; 
+import img3 from "@/public/assets/img3.jpg"
 
 const InfoSection = () => {
-  const images = [
-    '/assets/img3.jpg',
-    '/assets/img4.jpg', 
-    '/assets/img5.jpg',
-    '/assets/img10.jpg',
-    '/assets/img9.jpg', 
-  ];
-
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true, // Enables infinite scroll
-    speed: 10,   // Adjust scroll speed if necessary
-  });
-
-  // Auto-scroll the carousel every 10 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (emblaApi) {
-        emblaApi.scrollNext(); // Use Embla API to scroll to the next item
-      }
-    }, 10000); // 1000ms = 1 seconds
-
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, [emblaApi]);
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between p-8 md:p-16 bg-gray-100">
+    <div className="flex flex-col md:flex-row items-center justify-between p-8 md:p-16 bg-gray-100 md:gap-40">
       {/* Text Content */}
       <div className="md:w-1/2 mb-8 md:mb-0">
         <h1 className="text-3xl md:text-5xl font-bold text-gray-800 mb-4">
@@ -60,30 +35,17 @@ const InfoSection = () => {
         </p>
       </div>
 
-      {/* Carousel Image Section */}
+      {/*Image Section */}
       <div className="md:w-1/2 w-full relative">
-        <Carousel className="w-full" ref={emblaRef}  options={{ draggable: false }}>
-          <CarouselContent>
-            {images.map((img, index) => (
-              <CarouselItem key={index}>
-                <div className="p-2">
-                  <Card>
-                    <CardContent className="relative w-full h-96">
-                      <Image
-                        src={img}
-                        alt={`Image ${index + 1}`}
-                        layout="fill"
-                        className="w-full h-full object-cover rounded-lg"
-                        priority={true}
-                        quality={100}
-                      />
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+        <Image
+          src={img3}
+          width={800}
+          height={800}
+          alt="background"
+          priority={true}
+          quality={100}
+          className="rounded-2xl"
+        />
       </div>    
     </div>
   );
