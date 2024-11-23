@@ -3,13 +3,15 @@
 import React from 'react';
 import { Button } from '../ui/button';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter} from 'next/navigation';
 
 const ProductCard = ({ id, title, imageUrl, collectionId }) => {
     const router = useRouter();
 
-    const handleDetailsClick = () => {
-        router.push(`/${id}`);
+    const handleDetailsClick = (id) => {
+        const query = new  URLSearchParams({id:id}).toString();
+        console.log("this is the query for ID", query);
+        router.push(`/collections/${query}`);
     };
 
     return (

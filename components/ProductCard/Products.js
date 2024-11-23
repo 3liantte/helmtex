@@ -1,6 +1,9 @@
-// src/App.jsx
+"use client"
 import React from 'react';
-import ProductCard from './ProductCard';
+import { Button } from '../ui/button';
+import Image from 'next/image';
+import { useRouter} from 'next/navigation';
+
 
 function Products() {
     const products = [
@@ -19,23 +22,33 @@ function Products() {
         { id: 13, title: "@Work Range", imageUrl: "/assets/workrange.jpg" },
     ];
 
-    const sortedProducts = products.sort((a, b) => {
-        const nameA = a.title || '';
-        const nameB = b.title || '';
-        return nameA.localeCompare(nameB);
-    });
-          
+    const router = useRouter();
+
+    const handleDetailsClick = (id) => {
+        const query = new  URLSearchParams({id:id}).toString();
+        console.log("this is the query for ID", query);
+        router.push(`/collections/${query}`);
+    };
+
     return (
         <div className="container mx-auto px-4 py-6">
             <header className="mb-6 text-center">
                 <h1 className="text-3xl font-bold">Product Ranges</h1>
             </header>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {sortedProducts.map((product) => (
-                    <div key={product.id} className="transition-all duration-300 hover:scale-105">
-                        <ProductCard {...product} />
-                    </div>
-                ))}
+                <div className="border rounded-lg shadow-md p-4">
+                <Image
+                    src={products.imageUrl}
+                    alt={products.title}
+                    className="w-full h-48 object-cover mb-4"
+                    priority={true}
+                    quality={100}
+                    width={600}
+                    height={600}
+                />
+                <h2 className="font-bold text-lg mb-2">{products.title}</h2>
+                <Button onClick={handleDetailsClick}>More Details</Button>
+            </div>
             </div>    
         </div>
     );

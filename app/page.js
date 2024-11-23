@@ -5,6 +5,7 @@ import Reviews from "@/components/CustomReviews/Reviews";
 import Footer from "@/components/Footer/Footer";
 import WelcomePage from "@/components/HomePage/Welcomepage";
 import Specialities from "@/components/Specialties/Specialties";
+import ActiveSlider from "@/components/ProductCarousel/ActiveSlider";
 
 export default function Home() {
   return (
@@ -13,7 +14,7 @@ export default function Home() {
         <WelcomePage/>
         <InfoSection/>
         <Specialities/>
-        <ProductCarousel/>
+        <ActiveSlider/>
         <Reviews/>
         <Footer/>
        </div>

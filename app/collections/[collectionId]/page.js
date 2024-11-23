@@ -29,12 +29,16 @@
 
 // export default page;
 
+"use client"
 import React from 'react'
+import { useSearchParams } from 'next/navigation'
 
 const page = () => {
+  const searchParams = useSearchParams("")
+  const id = searchParams.get("id")
   return (
     <div className="p-24 flex justify-center items-center h-screen">
-      This is the id page
+      <p className="bg-blue-700">{id}</p>
     </div>
   )
 }

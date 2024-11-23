@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import backgroundImage from "@/public/assets/background.png"
-import displayImage from "@/public/assets/img1.png"
+import displayImage from "@/public/assets/img2.jpg"
+import displayImage2 from "@/public/assets/img7.jpg"
 
 const logos = [
   { src: "/images/helm.png", alt: "Helm Textile Mills Logo" },
@@ -29,7 +30,7 @@ const AboutPage = () => {
   
   return (
     <div className="font-sans">
-      <section className="relative h-[400px] flex items-center">
+      <section className="relative h-[25rem] flex items-center">
         <Image
           src={backgroundImage}
           alt="Background"
@@ -37,7 +38,7 @@ const AboutPage = () => {
           objectFit="cover"
           quality={100}
           priority={true}
-          className="absolute inset-0 -z-10"
+          className="rounded-lg shadow-lg w-full sm:w-auto"
         />
         <div className="absolute inset-0 bg-black bg-opacity-50" />
         <div className="relative z-10 mx-auto text-center text-white">
@@ -48,16 +49,18 @@ const AboutPage = () => {
       {/* Welcome Section */}
       <section className="py-16 px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center">
-          <div className="w-full sm:w-1/2">
-            <Image
-              src={displayImage}
-              alt="Interior Design"
-              quality={100}
-              width={400}
-              height={400}
-              priority={true}
-              className="rounded-lg shadow-lg w-full sm:w-auto"
-            />
+          <div className="w-full sm:w-1/2 pr-14">
+            <div className="relative w-full h-80 sm:h-[400px] rounded-lg shadow-lg overflow-hidden">
+              <Image
+                src={displayImage2}
+                alt="Interior Design"
+                quality={100}
+                fill
+                sizes="(max-width: 640px) 100vw, 50vw"
+                priority={true}
+                className="object-cover"
+              />
+            </div>
           </div>
           <div className="w-full sm:w-1/2 sm:pl-8 mt-6 sm:mt-0">
             <h2 className="text-2xl sm:text-3xl font-semibold text-gray-800 mb-4">
@@ -206,7 +209,7 @@ const AboutPage = () => {
           </div>
 
           {/* Right Content */}
-          <div className="relative">
+          <div className="relative w-full h-80 sm:h-[400px] rounded-xl shadow-md overflow-hidden">
             <Image
               src={displayImage}
               alt="Interior Design"
@@ -230,7 +233,7 @@ const AboutPage = () => {
         <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
           <h3 className="text-2xl font-bold">Ready to Turn Your Designs into Reality?</h3>
           <Button
-            className="bg-yellow-500 hover:bg-yellow-300 px-6 py-2 rounded text-gray-800 font-bold"
+            className="bg-yellow-500 hover:bg-yellow-300 text-gray-800 font-bold"
             onClick={() => window.location = '/contacts'}
           >
             Contact Us

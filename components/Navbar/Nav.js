@@ -32,6 +32,7 @@ const Nav = () => {
                             className="w-24"
                             priority={true}
                             quality={100}
+                            onClick={() => window.location = '/'}
                         />
                     </div>
                     <Button

@@ -1,6 +1,6 @@
 // src/App.jsx
 import React from 'react';
-import ProductCard from '../ProductCard';
+import Product from '../Product';
 import { collections } from './data';
 
 function Products() {
@@ -12,7 +12,7 @@ function Products() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {collections.map((collection) =>
                     collection.products.map((product) => (
-                        <ProductCard 
+                        <Product 
                             key={product.id} 
                             {...product} 
                             collectionId={collection.id} 

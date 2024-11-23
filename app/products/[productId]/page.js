@@ -1,8 +1,7 @@
-// app/collection/[collectionId]/product/[productId].jsx
 import React from 'react';
 import { collections } from '@/components/ProductCard/Collection/data';
 import { notFound } from 'next/navigation';
-import ProductCard from '@/components/ProductCard/ProductCard';
+import Products from '@/components/ProductCard/Products';
 
 const page = ({ params }) => {
     const { collectionId, productId } = params;
@@ -29,7 +28,7 @@ const page = ({ params }) => {
                 {collection.products
                     .filter((p) => p.id !== productId) // Exclude current product
                     .map((relatedProduct) => (
-                        <ProductCard key={relatedProduct.id} {...relatedProduct} />
+                        <Products key={relatedProduct.id} {...relatedProduct} />
                     ))}
             </div>
         </div>
