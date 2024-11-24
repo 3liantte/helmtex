@@ -16,12 +16,12 @@ import Image13 from "@/public/assets/customise.jpg";
 export const ServiceData = [
   {
     title: "@Work Range",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    content: "@work is a new range we have worked on to bring you a local content product which is made up of flat woven, hard wearing fabrics.",
     backgroundImage: Image1,
   },
   {
     title: "Diamond Range",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    content: "Diamond Range offers the timeless classic fabrics never to be lost.",
     backgroundImage: Image2,
   },
   {

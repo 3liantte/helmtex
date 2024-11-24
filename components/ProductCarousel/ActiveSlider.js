@@ -1,16 +1,22 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/free-mode";
 import { FreeMode, Pagination } from "swiper/modules";
 import { ServiceData } from "../constants";
-import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 
 const ActiveSlider = () => {
+  const router = useRouter();
+
+  const handleNavigation = () => {
+    router.push("/products");
+  };
+
   return (
     <div
       className="flex items-center justify-start flex-col min-h-fit mb-20 mt-20"
@@ -32,7 +38,11 @@ const ActiveSlider = () => {
         className="w-full max-w-[90%] lg:max-w-[80%]"
       >
         {ServiceData.map((item) => (
-          <SwiperSlide key={item.title} aria-label={`Slide ${item.title}`}>
+          <SwiperSlide
+            key={item.title}
+            aria-label={`Slide ${item.title}`}
+            onClick={handleNavigation}
+          >
             <div className="flex flex-col gap-6 sm:gap-6 mb-8 group relative shadow-lg text-white rounded-lg px-4 sm:px-6 py-6 sm:py-8 h-[220px] w-[180px] sm:h-[250px] sm:w-[200px] lg:h-[350px] lg:w-[300px] xl:h-[400px] xl:w-[350px] overflow-hidden cursor-pointer">
               {/* Background Image */}
               <Image
@@ -47,7 +57,9 @@ const ActiveSlider = () => {
                 <h1 className="text-base sm:text-lg lg:text-xl font-bold">
                   {item.title}
                 </h1>
-                <p className="text-xs sm:text-sm lg:text-base">{item.content}</p>
+                <p className="mt-2 text-sm sm:text-base lg:text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  {item.content}
+                </p>
               </div>
             </div>
           </SwiperSlide>
