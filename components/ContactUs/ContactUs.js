@@ -1,104 +1,119 @@
-"use client"
+import React from "react";
+import Footer from "../Footer/Footer";
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '../ui/button';
-import Link from 'next/link';
-import { Mail, MapPin, MessageCircleMore, Phone } from 'lucide-react';
-
-const ContactUs = () => {
-  const [location, setLocation] = useState({ latitude: null, longitude: null });
-
-  useEffect(() => {
-    // Check if the browser supports geolocation
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        },
-        (error) => {
-          console.error("Error fetching location: ", error);
-        }
-      );
-    } else {
-      console.error("Geolocation is not supported by this browser.");
-    }
-  }, []);
-
+const ContactPage = () => {
   return (
-    <div className="min-h-screen font-sans">
-      {/* Header Section */}
-      <div className="text-center py-10">
-        <h1 className="text-4xl font-bold">Contact Us</h1>
-      </div>
-
-      {/* Contact Section */}
-      <div className="max-w-7xl mx-auto p-6 flex flex-col md:flex-row gap-10">
-        {/* Contact Form */}
-        <div className="md:w-1/2 bg-gray-200 p-8 rounded-lg shadow-lg">
-          <h2 className="text-3xl font-semibold text-gray-700 mb-6">Get In Touch</h2>
-          <form className="flex flex-col gap-4">
-            <input
-              type="text"
-              placeholder="Name"
-              className="p-3 bg-gray-300 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              className="p-3 bg-gray-300 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <textarea
-              placeholder="Type Here..."
-              rows="4"
-              className="p-3 bg-gray-300 rounded-3xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <Button
-              type="submit"
-            >
-              Send Now
-            </Button>
-          </form>
-        </div>
-
-        {/* Contact Info Section */}
-        <div className="md:w-1/2 flex flex-col gap-8 text-gray-700">
-          <p>
-            In tempus nisl turpis, at ultricies dui eleifend a. Quisque et quam vel mauris consectetur pharetra euismod
-            et eleifend. Nullam orci purus.
-          </p>
-
+    <div className="flex flex-col items-center justify-between pt-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl">
+        {/* Contact Information */}
+        <div className="bg-[#00378b] text-white p-8 rounded-lg shadow-lg">
+          <h2 className="text-2xl font-semibold mb-4">Contact Information</h2>
+          <p className="mb-6">Say something to start a live chat!</p>
           <div className="space-y-4">
             <div className="flex items-center">
-              <a href="tel:+27114935495" className="mb-2 flex gap-8 hover:text-blue-700">
-              <Phone />
-              +27 11 493 5495
-            </a>            </div>
+              <span className="material-icons mr-3">phone</span>
+              <span>+1 012 3456 789</span>
+            </div>
             <div className="flex items-center">
-              <a href="mailto:info@helmtex.co.za?subject=Inquiry%20from%20Website" className="mb-2 flex gap-8 hover:text-blue-700">
-              <Mail />
-              info@helmtex.co.za
-            </a>            </div>
+              <span className="material-icons mr-3">email</span>
+              <span>demo@gmail.com</span>
+            </div>
             <div className="flex items-center">
-              <a href="tel:+27114935495" className="mb-2 flex gap-8 hover:text-blue-700">
-              <MessageCircleMore />
-              +27 73 713 9683
-            </a>            </div>
-            <div className="flex items-center">
-              <Link 
-              href="https://maps.app.goo.gl/ujC1gntD3jMfKmbT9"
-              className="mb-2 flex gap-8 hover:text-blue-700">
-              <MapPin />
-              33 Fennell Street, New Centre, Johannesburg, 2001
-            </Link>            
+              <span className="material-icons mr-3">location_on</span>
+              <span>33 Fennell Street, New Centre, Johannesburg, 2001</span>
             </div>
           </div>
+          <div className="flex mt-6 space-x-4">
+            {/* Social Icons */}
+            <a href="#" className="text-xl hover:text-gray-300">Twitter</a>
+            <a href="#" className="text-xl hover:text-gray-300">Instagram</a>
+            <a href="#" className="text-xl hover:text-gray-300">Whatsapp</a>
+          </div>
         </div>
+
+        {/* Contact Form */}
+        <div className="bg-white border border-[#00378b] p-8 rounded-lg shadow-lg">
+          <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
+          <p className="mb-6">Any questions or remarks? Just write us a message!</p>
+          <form>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <input
+                type="text"
+                placeholder="First Name"
+                className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="text"
+                placeholder="Last Name"
+                className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="email"
+                placeholder="Email"
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Phone Number"
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Select Subject:</label>
+              <div className="flex space-x-4">
+                <label>
+                  <input
+                    type="radio"
+                    name="subject"
+                    className="mr-2"
+                  />
+                  General Inquiry
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="subject"
+                    className="mr-2"
+                  />
+                  Feedback
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="subject"
+                    className="mr-2"
+                  />
+                  Support
+                </label>
+              </div>
+            </div>
+            <div className="mb-6">
+              <textarea
+                placeholder="Write your message..."
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows="4"
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              className="bg-[#00378b] text-white px-6 py-3 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="mt-10 w-full">
+        <Footer/>
       </div>
     </div>
   );
 };
 
-export default ContactUs;
+export default ContactPage;

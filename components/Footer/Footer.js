@@ -1,69 +1,114 @@
-import { Facebook, Instagram, Mail, MapPin, MessageCircle, MessageCircleMore, Phone } from 'lucide-react';
+import { Facebook, Instagram, Mail, MapIcon, MapPin, MessageCircle, MessageCircleMore, Phone } from 'lucide-react';
 import React from 'react';
 import Image from 'next/image';
 import HelmLogo from "@/public/images/helm2.png";
 import Link from 'next/link';
 
+const Links = [
+  { name: "Home", link: "/" },
+  { name: "About", link: "/about" },
+  { name: "Products", link: "/products" },
+  { name: "Blog", link: "/blog" },
+  { name: "Contact Us", link: "/contacts" },
+  { name: "FAQ", link: "/faq" },
+];
+
+
 const Footer = () => {
   return (
-    <footer className="bg-[#00378b] text-white py-12">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {/* Reservations Office Section */}
-          <div className="border border-white p-6 rounded-lg">
-            <h3 className="text-lg sm:text-xl font-semibold mb-4">Reservations Office</h3>
-            <Link 
-              href="https://maps.app.goo.gl/ujC1gntD3jMfKmbT9"
-              className="mb-2 flex gap-8">
-              <MapPin />
-              33 Fennell Street, New Centre, Johannesburg, 2001
-            </Link>
-            {/* Phone number with tel: protocol */}
-            <a href="tel:+27114935495" className="mb-2 flex gap-8">
-              <Phone />
-              +27 11 493 5495
-            </a>
-            {/* Email with mailto: protocol and subject */}
-            <a href="mailto:info@helmtex.co.za?subject=Inquiry%20from%20Website" className="mb-2 flex gap-8">
+    <footer className="bg-[#00378b] text-white py-10">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-5 md:gap-24 gap-8">
+        {/* Logo Section */}
+        <div className="col-span-1">
+          <Image
+                src={HelmLogo}
+                alt="Helm Logo"
+                className="w-full max-w-[200px]"
+                priority={true}
+                quality={100}
+              />
+        </div>
+
+        {/* Reach Us Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Reach us</h3>
+          <ul className="space-y-2 text-sm">
+            <li className="flex items-center">
+              <a href="tel:+27114935495" className="mb-2 flex gap-8 hover:text-blue-500">
+                <Phone />
+                +27 11 493 5495
+              </a>
+            </li>
+            <li className="flex items-center">
+            <a href="mailto:info@helmtex.co.za?subject=Inquiry%20from%20Website" className="mb-2 flex gap-8 hover:text-blue-500">
               <Mail />
               info@helmtex.co.za
             </a>
-            <div className="flex space-x-4 mt-4 gap-4">
-              <a href="https://facebook.com" aria-label="Facebook" className="hover:text-gray-200">
-                <Facebook />
-              </a>
-              <a href="https://twitter.com" aria-label="Twitter" className="hover:text-gray-200">
-                <MessageCircleMore />
-              </a>
-              <a href="https://instagram.com" aria-label="Instagram" className="hover:text-gray-200">
-                <Instagram />
-              </a>
-            </div>
-          </div>
+            </li>
+            <li className="flex items-start">
+              <Link 
+                href="https://maps.app.goo.gl/ujC1gntD3jMfKmbT9"
+                className="mb-2 flex gap-8 hover:text-blue-500">
+                <MapPin size={48} />
+                33 Fennell Street, New Centre, Johannesburg, 2001
+              </Link>
+            </li>
+          </ul>
+        </div>
+        
 
-          {/* Office Hours Section */}
-          <div className="border border-white p-6 rounded-lg">
-            <h3 className="text-lg sm:text-xl font-semibold mb-4">Office Hours</h3>
-            <p className="mb-2"><span className="font-semibold">Monday - Thursday</span><br />7:00 am to 4:30 pm</p>
-            <p className="mb-2"><span className="font-semibold">Friday</span> <br/> 07:00 am to 3:30pm</p>
-            <p><span className="font-semibold">Saturday - Sunday</span><br />Closed</p>
-          </div>
-
-          {/* Get Social Section */}
-          <div className="border border-white p-6 rounded-lg flex justify-center">
-            <Image
-              src={HelmLogo}
-              alt="Helm Logo"
-              className="w-full max-w-[600px]"
-              priority={true}
-              quality={100}
-            />
-          </div>
+        {/* Company Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Company</h3>
+          <ul className="space-y-2 text-sm">
+            <li><a href="\about" className="hover:text-blue-500 hover:underline">About</a></li>
+            <li><a href="\contacts" className="hover:text-blue-500 hover:underline">Contact</a></li>
+            <li><a href="\blog" className="hover:text-blue-500 hover:underline">Blog</a></li>
+          </ul>
         </div>
 
-        {/* Copyright Notice */}
-        <div className="text-center border-t border-gray-700 pt-8 mt-8">
-          <p>Copyright &copy; {new Date().getFullYear()} Helmtex. All rights reserved.</p>
+        {/* Legal Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Legal</h3>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <Link href="/privacy-policy" legacyBehavior>
+                <a className="hover:text-blue-500 hover:underline">Privacy Policy</a>
+              </Link>
+            </li>            
+            <li>
+              <Link href="/terms-services" legacyBehavior>
+                <a className="hover:text-blue-500 hover:underline">Terms & Services</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/terms-of-use" legacyBehavior>
+                <a className="hover:text-blue-500 hover:underline">Terms of Use</a>
+              </Link>
+            </li>      
+            <li>
+              <Link href="/refund-policy" legacyBehavior>
+                <a className="hover:text-blue-500 hover:underline">Refund Policy</a>
+              </Link>
+            </li>  
+          </ul>
+        </div>
+
+        {/* Quick Links Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Social Media</h3>
+          <div className="flex space-x-4 mt-4 gap-2">
+                <a href="https://web.facebook.com/p/Helm-Textile-Mills-61559102703086/?_rdc=1&_rdr" aria-label="Facebook" className="hover:text-blue-500">
+                  <Facebook />
+                </a>
+                <a href="https://wa.me/+27824520560" aria-label="Twitter" className="hover:text-blue-500">
+                  <MessageCircleMore />
+                </a>
+                <a href="https://www.instagram.com/helm_textiles/" aria-label="Instagram" className="hover:text-blue-500">
+                  <Instagram />
+                </a>
+            </div>
+
         </div>
       </div>
     </footer>
