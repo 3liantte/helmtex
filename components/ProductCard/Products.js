@@ -24,9 +24,8 @@ function Products() {
 
     const router = useRouter();
 
-    const handleDetailsClick = (id) => {
-        const query = new  URLSearchParams({id:id}).toString();
-        console.log("this is the query for ID", query);
+    const handleDetailsClick = (id,title) => {
+        const query = new  URLSearchParams({id,title}).toString();
         router.push(`/collections/${query}`);
     };
 
@@ -36,19 +35,26 @@ function Products() {
                 <h1 className="text-3xl font-bold">Product Ranges</h1>
             </header>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div className="border rounded-lg shadow-md p-4">
-                <Image
-                    src={products.imageUrl}
-                    alt={products.title}
-                    className="w-full h-48 object-cover mb-4"
-                    priority={true}
-                    quality={100}
-                    width={600}
-                    height={600}
-                />
-                <h2 className="font-bold text-lg mb-2">{products.title}</h2>
-                <Button onClick={handleDetailsClick}>More Details</Button>
-            </div>
+                {products.map((items,index) => {
+                    return(
+                        <div onClick={() => handleDetailsClick(items.id,items.title)} key={index} className="border rounded-lg shadow-md p-4">
+                        <Image
+                            src={items.imageUrl}
+                            alt={items.title}
+                            className="w-full h-48 object-cover mb-4"
+                            priority={true}
+                            quality={100}
+                            width={600}
+                            height={600}
+                        />
+                        <h2 className="font-bold text-lg mb-2">{items.title}</h2>
+                        <Button onClick={handleDetailsClick}>More Details</Button>
+                    </div>
+        
+                    )
+                })
+
+                }
             </div>    
         </div>
     );

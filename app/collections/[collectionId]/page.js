@@ -30,15 +30,26 @@
 // export default page;
 
 "use client"
-import React from 'react'
 import { useSearchParams } from 'next/navigation'
+import {React, useEffect, useState } from 'react'
 
 const page = () => {
+  const [productDetails, setProductDetails] = useState({id:null, title:null})
   const searchParams = useSearchParams("")
-  const id = searchParams.get("id")
+
+  useEffect (() => {
+    const params = new URLSearchParams(window.location.search)
+    const title = params.get("title")
+    const id = params.get("id")
+    setProductDetails({id,title})
+    })
+
   return (
     <div className="p-24 flex justify-center items-center h-screen">
-      <p className="bg-blue-700">{id}</p>
+      {productDetails.id && productDetails.title ? (<div>
+        <p>{productDetails.id}</p>
+        <p>{productDetails.title}</p>
+      </div>):(<p>Nothing</p>)}
     </div>
   )
 }

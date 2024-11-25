@@ -8,7 +8,7 @@ import img5 from "@/public/assets/img1.png";
 import img6 from "@/public/assets/img1.png";
 
 const ArticleCard = ({ title, description, image }) => (
-  <div className="w-full rounded-xl bg-white shadow-lg shadow-gray-300 overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105">
+  <div className="w-full rounded-t-xl bg-white overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105">
     <Image
       src={image}
       alt={title}
@@ -18,7 +18,7 @@ const ArticleCard = ({ title, description, image }) => (
       height={400}
       className="w-full object-cover"
     />
-    <div className="w-full p-6 flex flex-col">
+    <div className="w-full p-6 flex flex-col border hover:border-[#00378b]">
       <h5 className="text-md font-semibold text-gray-900 mb-4 truncate">
         {title}
       </h5>
