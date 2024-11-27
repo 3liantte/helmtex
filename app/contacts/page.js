@@ -4,7 +4,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div className="p-24">
+    <div className="pt-24">
       <ContactUs/>
     </div>
   )

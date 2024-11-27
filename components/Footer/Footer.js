@@ -48,9 +48,9 @@ const Footer = () => {
             <li className="flex items-start">
               <Link 
                 href="https://maps.app.goo.gl/ujC1gntD3jMfKmbT9"
-                className="mb-2 flex gap-8 hover:text-blue-500">
-                <MapPin size={48} />
-                33 Fennell Street, New Centre, Johannesburg, 2001
+                className="flex gap-8 hover:text-blue-500">
+                <MapPin />
+                <h4 className="flex-1 items-center justify-center">33 Fennell Street, New Centre, Johannesburg, 2001</h4> 
               </Link>
             </li>
           </ul>
@@ -101,7 +101,7 @@ const Footer = () => {
                 <a href="https://web.facebook.com/p/Helm-Textile-Mills-61559102703086/?_rdc=1&_rdr" aria-label="Facebook" className="hover:text-blue-500">
                   <Facebook />
                 </a>
-                <a href="https://wa.me/+27824520560" aria-label="Twitter" className="hover:text-blue-500">
+                <a href="https://wa.me/+27824520560" aria-label="Whatsapp" className="hover:text-blue-500">
                   <MessageCircleMore />
                 </a>
                 <a href="https://www.instagram.com/helm_textiles/" aria-label="Instagram" className="hover:text-blue-500">

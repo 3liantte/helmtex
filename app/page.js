@@ -10,7 +10,7 @@ import ActiveSlider from "@/components/ProductCarousel/ActiveSlider";
 export default function Home() {
   return (
       <>
-       <div className="bg-white w-full h-screen">
+       <div className="bg-white md:w-full md:h-screen">
         <WelcomePage/>
         <InfoSection/>
         <Specialities/>

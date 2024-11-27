@@ -1,11 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
-import img1 from "@/public/assets/img1.png";
-import img2 from "@/public/assets/img1.png";
-import img3 from "@/public/assets/img1.png";
-import img4 from "@/public/assets/img1.png";
-import img5 from "@/public/assets/img1.png";
-import img6 from "@/public/assets/img1.png";
+import img1 from "@/public/assets/display2.jpg";
+import img2 from "@/public/assets/display4.jpg";
+import img3 from "@/public/assets/display3.jpg";
+import img4 from "@/public/assets/display4.jpg";
+import img5 from "@/public/assets/display3.jpg";
+import img6 from "@/public/assets/display4.jpg";
 
 const ArticleCard = ({ title, description, image }) => (
   <div className="w-full rounded-t-xl bg-white overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105">
