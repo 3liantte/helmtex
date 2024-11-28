@@ -19,7 +19,7 @@ const ActiveSlider = () => {
 
   return (
     <div
-      className="flex items-center justify-start flex-col min-h-fit bg-gray-100 pt-10 pb-10" role="region"
+      className="flex items-center justify-start flex-col min-h-fit bg-gray-100 pt-24 pb-24" role="region"
       aria-label="Service Slider"
     >
       <h1 className="mb-10 text-gray-700 font-semibold text-3xl">Our Products</h1>

@@ -76,10 +76,6 @@ const AboutPage = () => {
                 <p className="text-4xl font-bold text-gray-800">29+</p>
                 <p className="text-gray-600">Years of Experience</p>
               </div>
-              <div>
-                <p className="text-4xl font-bold text-gray-800">26,250+</p>
-                <p className="text-gray-600">Woven Fabrics</p>
-              </div>
             </div>
           </div>
         </div>
