@@ -8,7 +8,7 @@ import img5 from "@/public/assets/display3.jpg";
 import img6 from "@/public/assets/display4.jpg";
 
 const ArticleCard = ({ title, description, image }) => (
-  <div className="w-full rounded-t-xl bg-white overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105">
+  <div className="w-full rounded-t-xl bg-white overflow-hidden cursor-pointer">
     <Image
       src={image}
       alt={title}
@@ -16,7 +16,7 @@ const ArticleCard = ({ title, description, image }) => (
       priority={true}
       width={400}
       height={400}
-      className="w-full object-cover"
+      className="w-full object-cover transition-all duration-300 hover:scale-105"
     />
     <div className="w-full p-6 flex flex-col border hover:border-[#00378b]">
       <h5 className="text-md font-semibold text-gray-900 mb-4 truncate">
