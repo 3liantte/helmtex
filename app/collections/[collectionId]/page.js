@@ -42,7 +42,7 @@ const Collection = () => {
   };
 
   return (
-    <div className="pt-24 p-6">
+    <div className="p-24">
       <div className="relative mb-8">
         <Image
           src={imageUrl}
@@ -74,12 +74,8 @@ const Collection = () => {
               ([key, value]) => (
                 <div key={key} className="p-4 border rounded-xl">
                   {value.image && (
-
-                    <div className="relative">
-
                     <>
                       <div className="relative">
-
                         <Image
                           src={value.image}
                           alt={value.title}
@@ -87,14 +83,6 @@ const Collection = () => {
                           height={200}
                           className="rounded-lg object-cover w-full h-76"
                         />
-
-                      </div>
-                  )}
-                  <div className="flex justify-between items-center pt-4">
-                    <p className="text-xl">Design</p>
-
-                    <h3 className="text-xl font-semibold">{value.content}</h3>
-
                         <p className="absolute bottom-0 right-0 z-10 mb-2 mr-2 text-blue-500">
                           {value.code}
                         </p>
@@ -105,15 +93,7 @@ const Collection = () => {
                     <p className="text-xl font-semibold">{value.content}</p>
 
                     <h3 className="text-xl text-blue-500">{value.title}</h3>
-
                   </div>
-                  
-                  <div className="flex justify-between items-center pt-4">
-                    <p className="text-xl">Design Code</p>
-
-                    <h3 className="text-xl text-blue-500 font-semibold">{value.title}</h3>
-                  </div>
-
                 </div>
               )
             )}

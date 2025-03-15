@@ -1,13 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import backgroundImage from "../../public/assets/background4.jpg";
-import { Button } from "../ui/button";
-import { ChevronUp } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../components/ui/button";
 import { ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
 
 const WelcomePage = () => {
@@ -142,18 +137,6 @@ const WelcomePage = () => {
   };
 
   return (
-    <div className="relative h-screen bg-cover">
-      <Image
-        src={backgroundImage}
-        alt="Background"
-        layout="fill"
-        objectFit="cover"
-        quality={100}
-        priority={true}
-        className="bg-center sm:bg-right md:bg-center lg-bg-cover"
-      />
-      <div className="absolute inset-0 bg-black opacity-65" />
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4 sm:px-8">
     <div className="relative h-screen overflow-hidden">
       {/* Background Image Slider */}
       <div className="absolute inset-0 w-full h-full">
@@ -210,8 +193,6 @@ const WelcomePage = () => {
         </h3>
       </div>
 
-      </div>
-
       {/* Slider Navigation - Below the fixed content */}
       <div className="absolute bottom-10 left-0 right-0 z-30 flex justify-center gap-2">
         {images.map((_, index) => (
@@ -248,7 +229,7 @@ const WelcomePage = () => {
       >
         <ChevronRight className="h-6 w-6" />
       </Button>
-      
+
       {/* Scroll-to-Top Button with Tailwind Animations */}
       <div
         className={`fixed bottom-8 right-8 z-50 transition-all duration-500 ease-in-out transform ${
