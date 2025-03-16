@@ -7,40 +7,27 @@ import backgroundImage from "../../public/assets/background.png";
 import displayImage from "../../public/assets/img2.JPG";
 import displayImage2 from "../../public/assets/img7.JPG";
 
-const logos = [
-  { src: "/images/Custom.png", alt: "Helm Textile Mills Logo" },
-  { src: "/images/Diamond.png", alt: "Weavers World Logo" },
-  { src: "/images/Domestic.png", alt: "The Mill logo"},
-  { src: "/images/GreatOutdoor.png", alt: "Ulrich Seats logo"},
-  { src: "/images/WorkRange.png", alt: "City Lodge Hotels logo"},
-  { src: "/images/GreatPlains.png", alt: "St Ledger & Viney logo"},
-  { src: "/images/ScapeRange.png", alt: "Concept Africa logo"},
-  { src: "/images/SlubPlain.png", alt: "Africa Business logo"},  
-  { src: "/images/StudioExplore.png", alt: "Planet Seating logo"}, 
-  { src: "/images/TailorRange.png", alt: "Malondie logo"}, 
-  { src: "/images/StudioRange.png", alt: "MaXhosa logo"},
-  { src: "/images/ValleyRange.png", alt: "MaXhosa logo"},
-  { src: "/images/WestCliff.png", alt: "MaXhosa logo"},
-
-  { src: "/images/helm.png", alt: "Helm Textile Mills Logo" },
-  { src: "/images/weavers.png", alt: "Weavers World Logo" },
-  { src: "/images/themill.png", alt: "The Mill logo" },
-  { src: "/images/ulrich.png", alt: "Ulrich Seats logo" },
-  { src: "/images/citylodge.png", alt: "City Lodge Hotels logo" },
-  { src: "/images/stledger.png", alt: "St Ledger & Viney logo" },
-  { src: "/images/concept.png", alt: "Concept Africa logo" },
-  { src: "/images/africa.png", alt: "Africa Business logo" },
-  { src: "/images/planet.png", alt: "Planet Seating logo" },
-  { src: "/images/malondie.png", alt: "Malondie logo" },
-  { src: "/images/maxhosa.png", alt: "MaXhosa logo" },
-  {
-    /* more logos*/
-  },
+const productNames = [
+  "Cotton Twill Fabric",
+  "Polyester Blend",
+  "Linen Look Fabric",
+  "Eco-friendly Textiles",
+  "Outdoor Upholstery",
+  "Heavy Duty Canvas",
+  "Lightweight Voile",
+  "Denim Collection",
+  "Curtain Fabrics",
+  "Fire Retardant Textiles",
+  "Waterproof Materials",
+  "Velvet Upholstery",
+  "Jacquard Fabrics",
+  "Fleece and Knits",
+  // ... add more names!
 ];
+
 
 const AboutPage = () => {
   const [isPaused, setIsPaused] = useState(false);
-
   const handleMouseEnter = () => setIsPaused(true);
   const handleMouseLeave = () => setIsPaused(false);
 
@@ -168,7 +155,7 @@ const AboutPage = () => {
 
         {/* Logos */}
         <div className="text-center mb-10">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mt-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mt-8">
             Trusted by Industry Leaders
           </h2>
         </div>
@@ -182,50 +169,30 @@ const AboutPage = () => {
               isPaused ? "pause-marquee" : ""
             }`}
           >
-            {logos.concat(logos).map((logo, index) =>
-              logo.src ? (
-                <div
-                  key={index}
-                  className="w-24 h-24 flex items-center justify-center overflow-hidden group"
-                >
-                  <Image
-                    src={logo.src}
-                    width={100}
-                    height={100}
-                    alt={logo.alt}
-                    quality={100}
-                    priority={true}
-                    className="object-contain filter grayscale group-hover:grayscale-0 transition duration-300"
-                  />
-                </div>
-              ) : null
-            )}
+            {productNames.concat(productNames).map((name, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-center px-8 whitespace-nowrap text-gray-700 text-lg font-medium hover:text-blue-600 transition duration-300"
+              >
+                {name}
+              </div>
+            ))}
           </div>
           <div
             className={`flex space-x-8 w-fit animate-marquee ${
               isPaused ? "pause-marquee" : ""
             }`}
           >
-            {logos.concat(logos).map((logo, index) =>
-              logo.src ? (
-                <div
-                  key={index}
-                  className="w-24 h-24 flex items-center justify-center overflow-hidden group"
-                >
-                  <Image
-                    src={logo.src}
-                    width={100}
-                    height={100}
-                    alt={logo.alt}
-                    quality={100}
-                    priority={true}
-                    className="object-contain filter grayscale group-hover:grayscale-0 transition duration-300"
-                  />
-                </div>
-              ) : null
-            )}
+            {productNames.concat(productNames).map((name, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-center px-8 whitespace-nowrap text-gray-700 text-lg font-medium hover:text-blue-600 transition duration-300"
+              >
+                {name}
+              </div>
+            ))}
           </div>
-        </div>
+        </div>      
       </section>
 
       <section className="bg-gray-100 py-12">
