@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import backgroundImage from "../../public/assets/background.png";
-import displayImage from "../../public/assets/img2.jpg";
-import displayImage2 from "../../public/assets/img7.jpg";
+import displayImage from "../../public/assets/img2.JPG";
+import displayImage2 from "../../public/assets/img7.JPG";
 
 const logos = [
   { src: "/images/Custom.png", alt: "Helm Textile Mills Logo" },

@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import img from "../../public/assets/img9.jpg";
+import img from "../../public/assets/img9.JPG";
 
 const Specialties = () => {
   return (

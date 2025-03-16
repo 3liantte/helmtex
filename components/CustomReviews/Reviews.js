@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import backgroundImage from "../../public/assets/background2.jpg";
+import backgroundImage from "../../public/assets/background2.JPG";
 
 const reviews = [
   {
