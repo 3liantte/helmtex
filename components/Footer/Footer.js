@@ -8,10 +8,12 @@ import {
   MessageCircleMore,
   Phone,
 } from "lucide-react";
+import { MdOutlineEmail } from "react-icons/md";
 import React from "react";
 import Image from "next/image";
 import HelmLogo from "../../public/images/helm2.png";
 import Link from "next/link";
+import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 const Links = [
   { name: "Home", link: "/" },
@@ -55,7 +57,7 @@ const Footer = () => {
                 href="mailto:info@helmtex.co.za?subject=Inquiry%20from%20Website"
                 className="mb-2 flex gap-8 hover:text-blue-500"
               >
-                <Mail />
+                <MdOutlineEmail size={26}/>
                 info@helmtex.co.za
               </a>
             </li>
@@ -142,21 +144,21 @@ const Footer = () => {
               aria-label="Facebook"
               className="hover:text-blue-500"
             >
-              <Facebook />
+              <FaFacebook size={26}/>
             </a>
             <a
-              href="https://wa.me/+27824520560"
+              href="https://wa.me/+27739660936"
               aria-label="Whatsapp"
               className="hover:text-blue-500"
             >
-              <MessageCircleMore />
+              <FaWhatsapp size={26}/>
             </a>
             <a
               href="https://www.instagram.com/helm_textiles/"
               aria-label="Instagram"
               className="hover:text-blue-500"
             >
-              <Instagram />
+              <FaInstagram size={26}/>
             </a>
           </div>
         </div>
