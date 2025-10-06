@@ -1,6 +1,6 @@
 # Helm Textile Mills
 
-![Helm Textile Mills](https://www.helmtex.co.za/images/helm.png)
+![Helm Textile Mills](https://helmtex.co.za/_next/static/media/helm.45e72953.png)
 
 A modern, responsive website for Helm Textile Mills, a leading South African textile manufacturer established in 1992, specializing in high-quality fabrics for various industries.
 
