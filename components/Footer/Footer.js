@@ -138,7 +138,7 @@ const Footer = () => {
       </div>
 
       {/* Copyright Section */}
-      <div className="border-t border-blue-700 mt-12 py-6 text-center">
+      {/* <div className="border-t border-blue-700 mt-12 py-6 text-center">
         <p className="text-sm text-gray-300">
           © {new Date().getFullYear()} Helm Textile Mills. All Rights Reserved.
         </p>
@@ -153,7 +153,7 @@ const Footer = () => {
             @eliantte
           </a>
         </p>
-      </div>
+      </div> */}
     </footer>
   );
 };
