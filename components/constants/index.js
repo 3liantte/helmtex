@@ -84,6 +84,12 @@ export const ServiceData = [
   //     "Comfortable, practical, and made for everyday living. The Domestic Range offers versatile fabrics designed for home use—easy to care for and built to last, making them ideal for family-friendly spaces.",
   //   backgroundImage: Image12,
   // },
+  // {
+  //   title: "Solar/Net Range",
+  //   content:
+  //     "Lightweight, breathable, and perfect for layering. The Net Range features delicate textures and airy designs that add a touch of elegance and sophistication to any interior.",
+  //   backgroundImage: Image13,
+  // },
   {
     title: "Create Your Own",
     content:
