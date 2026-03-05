@@ -71,6 +71,10 @@ const products = [
     description:
       "Timeless plains and soft finishes perfect for serene spaces.",
   },
+  // {    id: 14,
+  //     title: "Solar/Net Range",
+  //     imageUrl: "/assets/wallpaper/DiamondDisplay.png",
+  // },
   {
     id: 12,
     title: "Westcliff Range",
