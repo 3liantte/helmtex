@@ -213,7 +213,7 @@ const Collection = () => {
                     </h3>
                   </div>
 
-                  <div className="mt-4 flex justify-end">
+                  {/* <div className="mt-4 flex justify-end">
                     <Button
                       variant="outline"
                       onClick={() => {
@@ -224,7 +224,7 @@ const Collection = () => {
                     >
                       Request Quote
                     </Button>
-                  </div>
+                  </div> */}
                 </div>
               ));
             })()}
