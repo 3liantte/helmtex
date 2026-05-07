@@ -25,10 +25,9 @@ const Reviews = () => {
         <Image
           src={backgroundImage}
           alt="Background"
-          layout="fill"
-          objectFit="cover"
-          priority
-          className="w-full h-full"
+          fill
+          sizes="100vw"
+          className="h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm" />
       </div>

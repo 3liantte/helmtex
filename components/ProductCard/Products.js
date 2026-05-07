@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/security/noDangerouslySetInnerHtml: <explanation> */
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import Script from "next/script";
 import { useRouter } from "next/navigation";
@@ -98,31 +98,39 @@ function Products() {
   const [isMobileRangeOpen, setIsMobileRangeOpen] = useState(false);
   const [isMobileColourOpen, setIsMobileColourOpen] = useState(false);
 
-  const baseFabrics = selectedRange
-    ? fabricsByRange[selectedRange] || []
-    : allFabrics;
-  const colourOptions = getGroupedColourOptions(
-    baseFabrics.map((fabric) => fabric.colour)
+  const baseFabrics = useMemo(
+    () => (selectedRange ? fabricsByRange[selectedRange] || [] : allFabrics),
+    [selectedRange]
+  );
+  const colourOptions = useMemo(
+    () => getGroupedColourOptions(baseFabrics.map((fabric) => fabric.colour)),
+    [baseFabrics]
   );
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
-  const filteredFabrics = baseFabrics.filter((fabric) => {
-    const matchesSearch =
-      !normalizedSearchTerm ||
-      [
-        fabric.title,
-        fabric.content,
-        fabric.fabricType,
-        fabric.colour,
-        fabric.rangeName,
-      ].some((field) => field?.toLowerCase().includes(normalizedSearchTerm));
-    const matchesColour =
-      !selectedColourFamily || fabric.colourFamilyKey === selectedColourFamily;
+  const filteredFabrics = useMemo(
+    () =>
+      baseFabrics.filter((fabric) => {
+        const matchesSearch =
+          !normalizedSearchTerm ||
+          [
+            fabric.title,
+            fabric.content,
+            fabric.fabricType,
+            fabric.colour,
+            fabric.rangeName,
+          ].some((field) => field?.toLowerCase().includes(normalizedSearchTerm));
+        const matchesColour =
+          !selectedColourFamily ||
+          fabric.colourFamilyKey === selectedColourFamily;
 
-    return matchesSearch && matchesColour;
-  });
-  const selectedRangeSummary = selectedRange
-    ? rangeSummaryMap[selectedRange]
-    : null;
+        return matchesSearch && matchesColour;
+      }),
+    [baseFabrics, normalizedSearchTerm, selectedColourFamily]
+  );
+  const selectedRangeSummary = useMemo(
+    () => (selectedRange ? rangeSummaryMap[selectedRange] : null),
+    [selectedRange]
+  );
   const previewImage =
     selectedRangeSummary?.imageUrl ||
     filteredFabrics[0]?.image ||
@@ -131,8 +139,9 @@ function Products() {
   const hasActiveFilters = Boolean(
     selectedRange || selectedColourFamily || normalizedSearchTerm
   );
-  const selectedColourOption = colourOptions.find(
-    (option) => option.key === selectedColourFamily
+  const selectedColourOption = useMemo(
+    () => colourOptions.find((option) => option.key === selectedColourFamily),
+    [colourOptions, selectedColourFamily]
   );
   const hasHiddenColourOptions =
     colourOptions.length > DEFAULT_VISIBLE_COLOUR_GROUPS;
@@ -140,15 +149,30 @@ function Products() {
     colourOptions.length - DEFAULT_VISIBLE_COLOUR_GROUPS,
     0
   );
-  const visibleColourOptions = showAllColourFamilies
-    ? colourOptions
-    : colourOptions.slice(0, DEFAULT_VISIBLE_COLOUR_GROUPS);
-  const displayColourOptions =
-    !showAllColourFamilies &&
-    selectedColourOption &&
-    !visibleColourOptions.some((option) => option.key === selectedColourOption.key)
-      ? [...visibleColourOptions, selectedColourOption]
-      : visibleColourOptions;
+  const visibleColourOptions = useMemo(
+    () =>
+      showAllColourFamilies
+        ? colourOptions
+        : colourOptions.slice(0, DEFAULT_VISIBLE_COLOUR_GROUPS),
+    [colourOptions, showAllColourFamilies]
+  );
+  const displayColourOptions = useMemo(() => {
+    if (
+      !showAllColourFamilies &&
+      selectedColourOption &&
+      !visibleColourOptions.some(
+        (option) => option.key === selectedColourOption.key
+      )
+    ) {
+      return [...visibleColourOptions, selectedColourOption];
+    }
+
+    return visibleColourOptions;
+  }, [
+    selectedColourOption,
+    showAllColourFamilies,
+    visibleColourOptions,
+  ]);
   const helperText = selectedColourOption
     ? `Showing fabrics grouped under the ${selectedColourOption.label} family.`
     : selectedRange
@@ -277,7 +301,7 @@ function Products() {
                       "Filter by range and colour before opening a collection. The goal is to help someone quickly move from inspiration to the exact fabrics that fit the project."}
                   </p>
 
-                  <div className="mt-8 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-3">
+                  <div className="mt-8 hidden max-w-3xl grid-cols-2 gap-3 sm:grid sm:grid-cols-3">
                     <div className="min-h-[104px] rounded-[20px] border border-white/12 bg-white/10 px-4 py-4 backdrop-blur-sm sm:min-h-[120px] sm:rounded-[22px]">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-blue-100">
                         Ranges
@@ -972,7 +996,6 @@ function Products() {
                   className="object-contain"
                   fill
                   sizes="100vw"
-                  priority
                 />
               ) : null}
             </div>

@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import Image from "next/image";
 import image from "../../public/assets/home1.jpg";
@@ -50,8 +49,7 @@ const InfoSection = () => {
           src={image}
           alt="background"
           fill
-          priority={true}
-          quality={100}
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="rounded-2xl object-cover"
         />
       </div>

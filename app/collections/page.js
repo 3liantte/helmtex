@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ChevronUp, Search, X } from "lucide-react";
 import subset from "../../lib/subset";
 import { Button } from "../../components/ui/button";
@@ -17,7 +17,6 @@ import { getFabricAttributes } from "../../lib/fabricFilters";
 import { getRangeMeta } from "../../lib/rangeCatalog";
 
 const Collection = () => {
-  const [matchedSubset, setMatchedSubset] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const searchParams = useSearchParams();
@@ -25,23 +24,17 @@ const Collection = () => {
   const title = searchParams.get("title");
   const router = useRouter();
 
-  useEffect(() => {
-    try {
-      if (!title) {
-        setMatchedSubset(null);
-        return;
-      }
+  const matchedSubset = useMemo(() => {
+    if (!title) {
+      return null;
+    }
 
-      const foundSubset = subset.find((range) => {
+    return (
+      subset.find((range) => {
         const category = Object.keys(range)[0];
         return category === title;
-      });
-
-      setMatchedSubset(foundSubset || null);
-    } catch (error) {
-      console.error(error);
-      setMatchedSubset(null);
-    }
+      }) || null
+    );
   }, [title]);
 
   useEffect(() => {
@@ -91,25 +84,36 @@ const Collection = () => {
 
   const rangeName = matchedSubset ? Object.keys(matchedSubset)[0] : title || "";
   const rangeItems = (matchedSubset && Object.values(matchedSubset)[0]) || {};
-  const fabrics = Object.entries(rangeItems).map(([key, value]) => {
-    const { fabricType, colour } = getFabricAttributes(rangeName, value?.content);
+  const fabrics = useMemo(
+    () =>
+      Object.entries(rangeItems).map(([key, value]) => {
+        const { fabricType, colour } = getFabricAttributes(
+          rangeName,
+          value?.content
+        );
 
-    return {
-      key,
-      ...value,
-      fabricType,
-      colour,
-    };
-  });
-  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
-  const filteredFabrics = fabrics.filter(
-    (fabric) =>
-      !normalizedSearchTerm ||
-      [fabric.title, fabric.content, fabric.fabricType, fabric.colour].some(
-        (field) => field?.toLowerCase().includes(normalizedSearchTerm)
-      )
+        return {
+          key,
+          ...value,
+          fabricType,
+          colour,
+        };
+      }),
+    [rangeItems, rangeName]
   );
-  const rangeMeta = getRangeMeta(rangeName);
+  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+  const filteredFabrics = useMemo(
+    () =>
+      fabrics.filter(
+        (fabric) =>
+          !normalizedSearchTerm ||
+          [fabric.title, fabric.content, fabric.fabricType, fabric.colour].some(
+            (field) => field?.toLowerCase().includes(normalizedSearchTerm)
+          )
+      ),
+    [fabrics, normalizedSearchTerm]
+  );
+  const rangeMeta = useMemo(() => getRangeMeta(rangeName), [rangeName]);
   const previewImage =
     imageUrl ||
     rangeMeta?.imageUrl ||
@@ -351,7 +355,6 @@ const Collection = () => {
                 className="object-contain"
                 fill
                 sizes="100vw"
-                priority
               />
             ) : null}
           </div>

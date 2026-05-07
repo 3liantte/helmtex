@@ -26,7 +26,6 @@ const Footer = () => {
             width={250}
             height={100}
             className="filter brightness-0 invert mb-4"
-            priority
           />
           <p className="text-gray-200 text-sm leading-relaxed">
             Helm Textile Mills: Innovating textile solutions with quality,

@@ -62,7 +62,6 @@ const ActiveSlider = () => {
                   fill
                   sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 30vw, 25vw"
                   className="object-cover"
-                  priority={ServiceData.indexOf(item) < 2}
                 />
               </div>
               <div className="absolute inset-0 bg-black opacity-20 group-hover:opacity-60 transition-opacity duration-300" />

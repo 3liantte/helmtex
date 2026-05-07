@@ -11,8 +11,7 @@ const Specialties = () => {
           src={image}
           alt="background"
           fill
-          priority
-          quality={100}
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="rounded-2xl object-cover"
         />
       </div>
