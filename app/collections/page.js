@@ -3,22 +3,19 @@
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ChevronUp, Search, X } from "lucide-react";
+import { ArrowLeft, ChevronUp, Search } from "lucide-react";
 import subset from "../../lib/subset";
 import { Button } from "../../components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogTitle,
-} from "../../components/ui/dialog";
 import { Input } from "../../components/ui/input";
+import FabricInspectImage from "../../components/ProductCard/FabricInspectImage";
+import FabricPreviewDialog from "../../components/ProductCard/FabricPreviewDialog";
 import { getFabricAttributes } from "../../lib/fabricFilters";
 import { getRangeMeta } from "../../lib/rangeCatalog";
 
 const Collection = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [hoveredFabricKey, setHoveredFabricKey] = useState("");
   const searchParams = useSearchParams();
   const imageUrl = searchParams.get("imageUrl");
   const title = searchParams.get("title");
@@ -83,7 +80,10 @@ const Collection = () => {
   };
 
   const rangeName = matchedSubset ? Object.keys(matchedSubset)[0] : title || "";
-  const rangeItems = (matchedSubset && Object.values(matchedSubset)[0]) || {};
+  const rangeItems = useMemo(
+    () => (matchedSubset && Object.values(matchedSubset)[0]) || {},
+    [matchedSubset]
+  );
   const fabrics = useMemo(
     () =>
       Object.entries(rangeItems).map(([key, value]) => {
@@ -114,11 +114,49 @@ const Collection = () => {
     [fabrics, normalizedSearchTerm]
   );
   const rangeMeta = useMemo(() => getRangeMeta(rangeName), [rangeName]);
+  const previewFabric = useMemo(
+    () =>
+      filteredFabrics.find((fabric) => fabric.key === hoveredFabricKey) || null,
+    [filteredFabrics, hoveredFabricKey]
+  );
   const previewImage =
+    previewFabric?.image ||
     imageUrl ||
     rangeMeta?.imageUrl ||
     fabrics[0]?.image ||
     "/api/placeholder/800/500";
+  const previewAlt =
+    previewFabric?.content ||
+    previewFabric?.title ||
+    rangeName ||
+    "Collection preview";
+  const previewTitle =
+    previewFabric?.content || rangeName || "Collection preview";
+  const previewMeta = previewFabric
+    ? `${previewFabric.title}${
+        previewFabric.colour ? ` / ${previewFabric.colour}` : ""
+      }`
+    : `${filteredFabrics.length} designs`;
+  const previewDescription = previewFabric
+    ? `Move across ${previewFabric.content || previewFabric.title} to inspect the weave, colour blend, and surface texture before opening the full preview.`
+    : rangeMeta?.description ||
+      "Open a design to inspect the fabric image more closely.";
+
+  const handlePreviewHover = (fabricKey) => {
+    setHoveredFabricKey(fabricKey);
+  };
+
+  const handlePreviewLeave = (fabricKey) => {
+    setHoveredFabricKey((currentKey) =>
+      currentKey === fabricKey ? "" : currentKey
+    );
+  };
+
+  const handlePreviewBlur = (event, fabricKey) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      handlePreviewLeave(fabricKey);
+    }
+  };
 
   return (
     <section className="bg-gray-50">
@@ -170,29 +208,38 @@ const Collection = () => {
             <button
               type="button"
               onClick={() =>
-                openImageDialog(previewImage, rangeName || "Collection preview")
+                openImageDialog(previewImage, previewAlt)
               }
               className="group relative min-h-[280px] overflow-hidden rounded-[24px] border border-white/10 bg-white/10 text-left xl:min-h-[320px]"
             >
-              <Image
+              <FabricInspectImage
                 src={previewImage}
-                alt={rangeName || "Collection preview"}
-                className="object-cover transition duration-500 group-hover:scale-105"
-                fill
+                alt={previewAlt}
+                hint="Hover to inspect weave"
+                lensSize={210}
                 priority
                 sizes="(max-width: 1024px) 100vw, 320px"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-blue-100">
-                  Range Preview
-                </p>
-                <p className="mt-2 text-xl font-semibold">{rangeName}</p>
-                <p className="mt-2 text-sm leading-6 text-slate-200">
-                  {rangeMeta?.description ||
-                    "Open a design to inspect the fabric image more closely."}
-                </p>
-              </div>
+                zoomFactor={2.8}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent" />
+                <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-5 text-white">
+                  <span className="rounded-full border border-white/10 bg-slate-950/35 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-100 backdrop-blur-sm">
+                    Weave Inspect
+                  </span>
+                  <span className="rounded-full border border-white/10 bg-slate-950/35 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm">
+                    {previewMeta}
+                  </span>
+                </div>
+                <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-blue-100">
+                    Range Preview
+                  </p>
+                  <p className="mt-2 text-xl font-semibold">{previewTitle}</p>
+                  <p className="mt-2 text-sm leading-6 text-slate-200">
+                    {previewDescription}
+                  </p>
+                </div>
+              </FabricInspectImage>
             </button>
           </div>
         </div>
@@ -251,6 +298,10 @@ const Collection = () => {
               filteredFabrics.map((fabric) => (
                 <article
                   key={fabric.key}
+                  onBlur={(event) => handlePreviewBlur(event, fabric.key)}
+                  onMouseEnter={() => handlePreviewHover(fabric.key)}
+                  onMouseLeave={() => handlePreviewLeave(fabric.key)}
+                  onFocus={() => handlePreviewHover(fabric.key)}
                   className="group overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
                 >
                   {fabric.image ? (
@@ -325,41 +376,10 @@ const Collection = () => {
         </div>
       </div>
 
-      <Dialog
-        open={Boolean(selectedImage)}
-        onOpenChange={(open) => {
-          if (!open) {
-            setSelectedImage(null);
-          }
-        }}
-      >
-        <DialogContent className="max-w-5xl w-full overflow-hidden bg-black/90 p-0">
-          <DialogTitle className="sr-only">
-            {selectedImage?.alt || "Image Preview"}
-          </DialogTitle>
-          <div className="absolute right-2 top-2 z-10">
-            <DialogClose asChild>
-              <Button
-                variant="ghost"
-                className="h-8 w-8 rounded-full p-0 text-white hover:bg-white/20"
-              >
-                <X className="h-5 w-5" />
-              </Button>
-            </DialogClose>
-          </div>
-          <div className="relative flex h-[80vh] w-full items-center justify-center">
-            {selectedImage ? (
-              <Image
-                src={selectedImage.src}
-                alt={selectedImage.alt}
-                className="object-contain"
-                fill
-                sizes="100vw"
-              />
-            ) : null}
-          </div>
-        </DialogContent>
-      </Dialog>
+      <FabricPreviewDialog
+        selectedImage={selectedImage}
+        onClose={() => setSelectedImage(null)}
+      />
 
       <div className="fixed bottom-8 right-8 z-50 transition-all duration-500 ease-in-out transform">
         <Button
