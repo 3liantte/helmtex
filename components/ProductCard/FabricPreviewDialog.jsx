@@ -20,13 +20,13 @@ function FabricPreviewDialog({ selectedImage, onClose }) {
         }
       }}
     >
-      <DialogContent className="w-full max-w-6xl overflow-hidden border-0 bg-slate-950/95 p-0 text-white">
+      <DialogContent className="w-full max-w-6xl border-0 bg-slate-950/95 p-0 text-white max-h-[100dvh] overflow-hidden">
         <DialogTitle className="sr-only">
           {selectedImage?.alt || "Fabric Preview"}
         </DialogTitle>
 
         <div className="grid lg:grid-cols-[minmax(0,1fr)_280px]">
-          <div className="relative h-[70vh] min-h-[420px] bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.2),_transparent_55%),linear-gradient(180deg,_rgba(15,23,42,0.92),_rgba(2,6,23,1))] p-4 sm:p-6">
+          <div className="relative h-[55vh] sm:h-[62vh] lg:h-[70vh] bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.2),_transparent_55%),linear-gradient(180deg,_rgba(15,23,42,0.92),_rgba(2,6,23,1))] p-4 sm:p-6">
             {selectedImage ? (
               <FabricInspectImage
                 src={selectedImage.src}
@@ -42,7 +42,7 @@ function FabricPreviewDialog({ selectedImage, onClose }) {
             ) : null}
           </div>
 
-          <div className="border-t border-white/10 bg-white/5 p-6 lg:border-l lg:border-t-0">
+          <div className="hidden lg:flex lg:flex-col border-l border-white/10 bg-white/5 p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-blue-100">
               Fabric Preview
             </p>

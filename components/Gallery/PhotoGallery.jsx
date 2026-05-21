@@ -344,10 +344,13 @@ const PhotoGalleryInfiniteScroll = () => {
 
       {/* Image Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-5xl p-0 overflow-hidden bg-background">
+        <DialogContent className="max-w-5xl p-0 overflow-hidden bg-background max-h-[100dvh]">
           <DialogTitle className="sr-only">Image Preview</DialogTitle>
           <div className="relative">
-            <DialogClose className="absolute right-4 top-4 z-10 rounded-full text-black p-4" />
+            <DialogClose className="absolute right-2 top-2 sm:right-4 sm:top-4 z-20 rounded-full bg-black/60 p-2 text-white hover:bg-black/80 transition-colors">
+              <X className="h-5 w-5" />
+              <span className="sr-only">Close</span>
+            </DialogClose>
 
             {selectedImage && (
               <div className="flex items-center justify-center">
