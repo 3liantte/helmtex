@@ -31,8 +31,6 @@ const Nav = () => {
               src={HelmLogo}
               alt="Helm logo"
               className="w-24"
-              priority
-              quality={100}
               onClick={() => router.push("/")}
             />
           </div>

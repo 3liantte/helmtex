@@ -26,7 +26,6 @@ const Footer = () => {
             width={250}
             height={100}
             className="filter brightness-0 invert mb-4"
-            priority
           />
           <p className="text-gray-200 text-sm leading-relaxed">
             Helm Textile Mills: Innovating textile solutions with quality,
@@ -142,7 +141,7 @@ const Footer = () => {
         <p className="text-sm text-gray-300">
           © {new Date().getFullYear()} Helm Textile Mills. All Rights Reserved.
         </p>
-        <p className="text-sm text-gray-300">
+        {/* <p className="text-sm text-gray-300">
           Made with <span className="text-lg text-red-600">❤</span> {" "}
           <a
             href="https://koketso-portfolio.vercel.app/"
@@ -152,7 +151,7 @@ const Footer = () => {
           >
             @eliantte
           </a>
-        </p>
+        </p> */}
       </div>
     </footer>
   );

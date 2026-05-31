@@ -2,22 +2,20 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Button } from "../../components/ui/button";
-import { ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronUp } from "lucide-react";
+
+const images = ["/assets/homebackground.png"];
 
 const WelcomePage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [direction, setDirection] = useState("next"); // Track slide direction
   const [isAnimating, setIsAnimating] = useState(false);
-
-  // Images for the slider
-  const images = [
-    "/assets/homebackground.png",
-  ];
+  const hasMultipleSlides = images.length > 1;
 
   // Manual navigation functions
   const goToNextSlide = useCallback(() => {
-    if (isAnimating) return;
+    if (!hasMultipleSlides || isAnimating) return;
 
     setIsAnimating(true);
     setDirection("next");
@@ -27,10 +25,10 @@ const WelcomePage = () => {
     setTimeout(() => {
       setIsAnimating(false);
     }, 1000); // Match this with the CSS transition duration
-  }, [images.length, isAnimating]);
+  }, [hasMultipleSlides, isAnimating]);
 
   const goToPrevSlide = useCallback(() => {
-    if (isAnimating) return;
+    if (!hasMultipleSlides || isAnimating) return;
 
     setIsAnimating(true);
     setDirection("prev");
@@ -40,12 +38,12 @@ const WelcomePage = () => {
     setTimeout(() => {
       setIsAnimating(false);
     }, 1000); // Match this with the CSS transition duration
-  }, [images.length, isAnimating]);
+  }, [hasMultipleSlides, isAnimating]);
 
   // Go to specific slide
   const goToSlide = useCallback(
     (index) => {
-      if (isAnimating || index === currentSlide) return;
+      if (!hasMultipleSlides || isAnimating || index === currentSlide) return;
 
       setIsAnimating(true);
       // Determine direction based on index
@@ -68,7 +66,7 @@ const WelcomePage = () => {
         setIsAnimating(false);
       }, 1000);
     },
-    [currentSlide, isAnimating, images.length]
+    [currentSlide, hasMultipleSlides, isAnimating]
   );
 
   // Toggle visibility of the scroll-to-top button based on scroll position
@@ -87,6 +85,10 @@ const WelcomePage = () => {
 
   // Auto slide functionality
   useEffect(() => {
+    if (!hasMultipleSlides) {
+      return undefined;
+    }
+
     const interval = setInterval(() => {
       if (!isAnimating) {
         goToNextSlide();
@@ -94,7 +96,7 @@ const WelcomePage = () => {
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(interval);
-  }, [goToNextSlide, isAnimating]);
+  }, [goToNextSlide, hasMultipleSlides, isAnimating]);
 
   // Enhanced smooth scroll-to-top functionality
   const scrollToTop = () => {
@@ -189,19 +191,21 @@ const WelcomePage = () => {
       </div>
 
       {/* Slider Navigation - Below the fixed content */}
-      <div className="absolute bottom-10 left-0 right-0 z-30 flex justify-center gap-2">
-        {images.map((_, index) => (
-          <Button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all ${
-              currentSlide === index ? "bg-white scale-125" : "bg-white/50"
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-            disabled={isAnimating}
-          />
-        ))}
-      </div>
+      {hasMultipleSlides ? (
+        <div className="absolute bottom-10 left-0 right-0 z-30 flex justify-center gap-2">
+          {images.map((_, index) => (
+            <Button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all ${
+                currentSlide === index ? "bg-white scale-125" : "bg-white/50"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+              disabled={isAnimating}
+            />
+          ))}
+        </div>
+      ) : null}
 
       {/* Slider Arrows */}
       {/* <Button

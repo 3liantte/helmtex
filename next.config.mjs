@@ -3,14 +3,14 @@ const nextConfig = {
   // output: "export",
   trailingSlash: true,
   images: {
-    domains: ["firebasestorage.googleapis.com"],
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
         hostname: "firebasestorage.googleapis.com",
       },
     ],
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 2678400,
   },
 };
 

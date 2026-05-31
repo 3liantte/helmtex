@@ -66,7 +66,7 @@ const AboutPage = () => {
                 alt="Loom"
                 fill
                 className="object-cover"
-                priority
+                sizes="(max-width: 640px) 100vw, 50vw"
               />
             </div>
           </div>
@@ -168,7 +168,7 @@ const AboutPage = () => {
               alt="Interior Design"
               fill
               className="object-cover rounded-lg"
-              priority
+              sizes="(max-width: 640px) 100vw, 50vw"
             />
             <div className="absolute bottom-0 left-0 bg-white shadow-md p-4 rounded-lg m-4">
               <p className="italic text-gray-600">
