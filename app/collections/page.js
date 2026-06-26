@@ -3,14 +3,14 @@
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ChevronUp, Search } from "lucide-react";
+import { ArrowLeft, ChevronUp, FileText, Search } from "lucide-react";
 import subset from "../../lib/subset";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import FabricInspectImage from "../../components/ProductCard/FabricInspectImage";
 import FabricPreviewDialog from "../../components/ProductCard/FabricPreviewDialog";
 import { getFabricAttributes } from "../../lib/fabricFilters";
-import { getRangeMeta } from "../../lib/rangeCatalog";
+import { getRangeMeta, getRangeSlug } from "../../lib/rangeCatalog";
 
 const Collection = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -42,12 +42,12 @@ const Collection = () => {
     router.push("/products");
   };
 
-  const openImageDialog = (imageSrc, imageAlt) => {
+  const openImageDialog = (imageSrc, imageAlt, rangeSlug = null) => {
     if (!imageSrc) {
       return;
     }
 
-    setSelectedImage({ src: imageSrc, alt: imageAlt });
+    setSelectedImage({ src: imageSrc, alt: imageAlt, rangeSlug });
   };
 
   const scrollToTop = () => {
@@ -208,7 +208,7 @@ const Collection = () => {
             <button
               type="button"
               onClick={() =>
-                openImageDialog(previewImage, previewAlt)
+                openImageDialog(previewImage, previewAlt, getRangeSlug(rangeName))
               }
               className="group relative min-h-[280px] overflow-hidden rounded-[24px] border border-white/10 bg-white/10 text-left xl:min-h-[320px]"
             >
@@ -310,7 +310,8 @@ const Collection = () => {
                       onClick={() =>
                         openImageDialog(
                           fabric.image,
-                          fabric.content || fabric.title || "Fabric image"
+                          fabric.content || fabric.title || "Fabric image",
+                          getRangeSlug(rangeName)
                         )
                       }
                       className="relative block h-56 w-full overflow-hidden bg-slate-100 text-left"
@@ -352,18 +353,31 @@ const Collection = () => {
                       ) : null}
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() =>
-                        openImageDialog(
-                          fabric.image,
-                          fabric.content || fabric.title || "Fabric image"
-                        )
-                      }
-                      className="text-sm font-semibold text-blue-700 transition hover:text-blue-800"
-                    >
-                      Preview Fabric
-                    </button>
+                    <div className="flex items-center justify-between gap-3">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          openImageDialog(
+                            fabric.image,
+                            fabric.content || fabric.title || "Fabric image",
+                            getRangeSlug(rangeName)
+                          )
+                        }
+                        className="text-sm font-semibold text-blue-700 transition hover:text-blue-800"
+                      >
+                        Preview Fabric
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          router.push(`/range/${getRangeSlug(rangeName)}`)
+                        }
+                        className="flex items-center gap-1.5 text-xs font-medium text-slate-400 transition hover:text-blue-700"
+                      >
+                        <FileText className="h-3.5 w-3.5" />
+                        Technical Specs
+                      </button>
+                    </div>
                   </div>
                 </article>
               ))

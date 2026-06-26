@@ -2,10 +2,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Script from "next/script";
 import { useRouter } from "next/navigation";
-import { ChevronDown, ChevronRight, ChevronUp, Search } from "lucide-react";
+import { ChevronDown, ChevronRight, ChevronUp, FileText, Search } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { cn } from "../../lib/utils";
@@ -18,7 +19,7 @@ import {
   getFabricAttributes,
   getGroupedColourOptions,
 } from "../../lib/fabricFilters";
-import { getRangeMeta, rangeCatalog } from "../../lib/rangeCatalog";
+import { getRangeMeta, getRangeSlug, rangeCatalog } from "../../lib/rangeCatalog";
 
 const subsetByRange = Object.fromEntries(
   subset.map((rangeGroup) => {
@@ -86,12 +87,17 @@ const DEFAULT_VISIBLE_COLOUR_GROUPS = 6;
 
 function Products() {
   const router = useRouter();
-  const [selectedRange, setSelectedRange] = useState("");
+  const searchParams = useSearchParams();
+  const [selectedRange, setSelectedRange] = useState(() => {
+    const rangeParam = searchParams.get("range") || "";
+    return rangeSummaries.some((r) => r.title === rangeParam) ? rangeParam : "";
+  });
   const [selectedColourFamily, setSelectedColourFamily] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [hoveredFabricKey, setHoveredFabricKey] = useState("");
   const [showAllColourFamilies, setShowAllColourFamilies] = useState(false);
+  const [colourSearch, setColourSearch] = useState("");
   const [isMobileRangeOpen, setIsMobileRangeOpen] = useState(false);
   const [isMobileColourOpen, setIsMobileColourOpen] = useState(false);
 
@@ -190,6 +196,14 @@ function Products() {
     showAllColourFamilies,
     visibleColourOptions,
   ]);
+  const searchedColourOptions = useMemo(() => {
+    const term = colourSearch.trim().toLowerCase();
+    if (!term) return displayColourOptions;
+    return colourOptions.filter((option) =>
+      option.label.toLowerCase().includes(term)
+    );
+  }, [colourSearch, colourOptions, displayColourOptions]);
+
   const helperText = selectedColourOption
     ? `Showing fabrics grouped under the ${selectedColourOption.label} family.`
     : selectedRange
@@ -200,6 +214,7 @@ function Products() {
     setSearchTerm("");
     setSelectedRange("");
     setSelectedColourFamily("");
+    setColourSearch("");
     setIsMobileRangeOpen(false);
     setIsMobileColourOpen(false);
   };
@@ -207,6 +222,7 @@ function Products() {
   const handleSelectRange = (rangeName = "") => {
     setSelectedRange(rangeName);
     setSelectedColourFamily("");
+    setColourSearch("");
     setIsMobileRangeOpen(false);
   };
 
@@ -234,12 +250,12 @@ function Products() {
     );
   };
 
-  const openImageDialog = (imageSrc, imageAlt) => {
+  const openImageDialog = (imageSrc, imageAlt, rangeSlug = null) => {
     if (!imageSrc) {
       return;
     }
 
-    setSelectedImage({ src: imageSrc, alt: imageAlt });
+    setSelectedImage({ src: imageSrc, alt: imageAlt, rangeSlug });
   };
 
   const handlePreviewHover = (fabricKey) => {
@@ -318,7 +334,7 @@ function Products() {
       />
 
       <section className="bg-gray-50">
-        <div className="mx-auto w-full max-w-[1680px] px-4 py-10 sm:px-8 lg:px-10 lg:py-12">
+        <div className="mx-auto w-full max-w-[1680px] px-4 py-10 sm:px-6 lg:px-6 lg:py-12">
           <div className="overflow-hidden rounded-[32px] bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 shadow-[0_24px_50px_-24px_rgba(15,23,42,0.55)]">
             <div className="grid gap-6 px-5 py-7 sm:px-6 sm:py-8 lg:grid-cols-[minmax(0,1.25fr)_400px] lg:gap-8 lg:px-8 lg:py-10 xl:gap-12 xl:px-10 xl:py-12">
               <div className="flex flex-col justify-between text-white">
@@ -388,7 +404,7 @@ function Products() {
 
               <button
                 type="button"
-                onClick={() => openImageDialog(previewImage, previewAlt)}
+                onClick={() => openImageDialog(previewImage, previewAlt, getRangeSlug(previewFabric?.rangeName || selectedRange))}
                 className="relative hidden min-h-[260px] overflow-hidden rounded-[28px] border border-white/10 bg-white/10 text-left lg:block xl:min-h-[340px]"
               >
                 <FabricInspectImage
@@ -656,8 +672,20 @@ function Products() {
                             </span>
                           </div>
 
+                          <div className="relative mb-3">
+                            <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+                            <input
+                              type="text"
+                              placeholder="Search colours…"
+                              value={colourSearch}
+                              onChange={(e) => setColourSearch(e.target.value)}
+                              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-8 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                            />
+                          </div>
+
                           <div className="max-h-72 overflow-y-auto pr-1">
                             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                              {!colourSearch && (
                               <button
                                 type="button"
                                 onClick={() => handleSelectColourFamily("")}
@@ -679,8 +707,9 @@ function Products() {
                                   {baseFabrics.length}
                                 </span>
                               </button>
+                              )}
 
-                              {displayColourOptions.map((option) => (
+                              {searchedColourOptions.map((option) => (
                                 <button
                                   key={option.key}
                                   type="button"
@@ -803,7 +832,8 @@ function Products() {
                           onClick={() =>
                             openImageDialog(
                               fabric.image,
-                              fabric.content || fabric.title || "Fabric image"
+                              fabric.content || fabric.title || "Fabric image",
+                              getRangeSlug(fabric.rangeName)
                             )
                           }
                           className="relative block h-56 w-full overflow-hidden bg-slate-100 text-left"
@@ -848,26 +878,39 @@ function Products() {
                           ) : null}
                         </div>
 
-                        <div className="flex items-center justify-between gap-3">
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between gap-3">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                openImageDialog(
+                                  fabric.image,
+                                  fabric.content || fabric.title || "Fabric image",
+                                  getRangeSlug(fabric.rangeName)
+                                )
+                              }
+                              className="text-sm font-semibold text-blue-700 transition hover:text-blue-800"
+                            >
+                              Preview Fabric
+                            </button>
+                            <Button
+                              variant="outline"
+                              className="rounded-full border-slate-200 bg-white text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                              onClick={() => handleOpenRange(fabric.rangeName)}
+                            >
+                              View Range
+                            </Button>
+                          </div>
                           <button
                             type="button"
                             onClick={() =>
-                              openImageDialog(
-                                fabric.image,
-                                fabric.content || fabric.title || "Fabric image"
-                              )
+                              router.push(`/range/${getRangeSlug(fabric.rangeName)}`)
                             }
-                            className="text-sm font-semibold text-blue-700 transition hover:text-blue-800"
+                            className="flex items-center gap-1.5 text-xs font-medium text-slate-400 transition hover:text-blue-700"
                           >
-                            Preview Fabric
+                            <FileText className="h-3.5 w-3.5" />
+                            Technical Specifications
                           </button>
-                          <Button
-                            variant="outline"
-                            className="rounded-full border-slate-200 bg-white text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
-                            onClick={() => handleOpenRange(fabric.rangeName)}
-                          >
-                            View Range
-                          </Button>
                         </div>
                       </div>
                     </article>
@@ -896,8 +939,20 @@ function Products() {
                   </span>
                 </div>
 
-                <div className="mt-5 min-h-0 flex-1 overflow-y-auto pr-1">
+                <div className="relative mt-4">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    placeholder="Search colours…"
+                    value={colourSearch}
+                    onChange={(e) => setColourSearch(e.target.value)}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-8 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                  />
+                </div>
+
+                <div className="mt-3 min-h-0 flex-1 overflow-y-auto pr-1">
                   <div className="grid grid-cols-2 gap-3 xl:grid-cols-1">
+                    {!colourSearch && (
                     <button
                       type="button"
                       onClick={() => handleSelectColourFamily("")}
@@ -917,7 +972,8 @@ function Products() {
                         {baseFabrics.length}
                       </span>
                     </button>
-                    {displayColourOptions.map((option) => (
+                    )}
+                    {searchedColourOptions.map((option) => (
                       <button
                         key={option.key}
                         type="button"
@@ -956,7 +1012,7 @@ function Products() {
                     ))}
                   </div>
 
-                  {hasHiddenColourOptions ? (
+                  {hasHiddenColourOptions && !colourSearch ? (
                     <button
                       type="button"
                       onClick={() =>
