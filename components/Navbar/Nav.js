@@ -17,6 +17,7 @@ const Nav = () => {
     { name: "Products", link: "/products" },
     { name: "Finishes", link: "/finishes" },
     { name: "Gallery", link: "/gallery" },
+    // { name: "Visualizer", link: "/visualizer" },
   ];
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -51,8 +52,8 @@ const Nav = () => {
             isOpen ? "top-16" : "top-[-490px]"
           }`}
         >
-          {Links.map((link, i) => (
-            <li key={i} className="md:ml-8 text-lg md:my-0 my-4">
+          {Links.map((link) => (
+            <li key={link.link} className="md:ml-8 text-lg md:my-0 my-4">
               <Link
                 href={link.link}
                 className="text-gray-800 hover:text-blue-700 transition duration-300"

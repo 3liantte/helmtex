@@ -8,6 +8,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "firebasestorage.googleapis.com",
       },
+      {
+        protocol: "https",
+        hostname: "image.pollinations.ai",
+      },
     ],
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 2678400,
