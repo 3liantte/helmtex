@@ -127,6 +127,34 @@ const FurnitureIcon = ({ id, className }) => {
   }
 };
 
+// Template thumbnail: shows the real bundled photo (the same one the backend
+// composites onto) and falls back to the SVG silhouette while it's missing.
+const TemplateThumb = ({ item, isSelected }) => {
+  const [failed, setFailed] = useState(false);
+  if (!item.image || failed) {
+    return (
+      <FurnitureIcon
+        id={item.id}
+        className={cn(
+          "h-10 w-full transition-colors",
+          isSelected ? "text-blue-600" : "text-slate-400 group-hover:text-blue-400"
+        )}
+      />
+    );
+  }
+  return (
+    <div className="relative h-16 w-full overflow-hidden rounded-xl bg-slate-100">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={item.image}
+        alt={item.label}
+        className="h-full w-full object-cover"
+        onError={() => setFailed(true)}
+      />
+    </div>
+  );
+};
+
 export default function FurniturePicker({ selectedFurniture, onSelect }) {
   const [tab, setTab] = useState("template");
   const [uploadedPreview, setUploadedPreview] = useState(null);
@@ -140,10 +168,13 @@ export default function FurniturePicker({ selectedFurniture, onSelect }) {
     const url = URL.createObjectURL(file);
     setUploadedFile(file);
     setUploadedPreview(url);
+    // `file` carries the actual photo to the precise pipeline; the text
+    // description is only used by the creative fallback.
     onSelect({
       furnitureType: furnitureDescription || "custom furniture piece",
       furnitureDescription: furnitureDescription || "a custom upholstered furniture piece",
       previewImage: url,
+      file,
       isUpload: true,
     });
   };
@@ -162,6 +193,7 @@ export default function FurniturePicker({ selectedFurniture, onSelect }) {
         furnitureType: val || "custom furniture piece",
         furnitureDescription: val || "a custom upholstered furniture piece",
         previewImage: uploadedPreview,
+        file: uploadedFile,
         isUpload: true,
       });
     }
@@ -214,13 +246,7 @@ export default function FurniturePicker({ selectedFurniture, onSelect }) {
                     <Check className="h-3 w-3 text-white" />
                   </span>
                 )}
-                <FurnitureIcon
-                  id={item.id}
-                  className={cn(
-                    "h-10 w-full transition-colors",
-                    isSelected ? "text-blue-600" : "text-slate-400 group-hover:text-blue-400"
-                  )}
-                />
+                <TemplateThumb item={item} isSelected={isSelected} />
                 <div className="text-center">
                   <p className={cn(
                     "text-sm font-semibold",
@@ -269,7 +295,7 @@ export default function FurniturePicker({ selectedFurniture, onSelect }) {
             >
               <Upload className="h-8 w-8" />
               <span className="text-sm font-medium">Upload a photo of your furniture</span>
-              <span className="text-xs text-slate-400">Used as a reference for the AI prompt</span>
+              <span className="text-xs text-slate-400">Only the upholstered areas change — frame, legs and background stay intact</span>
             </button>
           )}
 

@@ -147,14 +147,17 @@ export default function FabricSelector({ selectedFabric, onSelect }) {
     setIsAnalysing(true);
     setSwatchDescription("");
 
-    // Tell parent: fabric selected but still analysing — disables Generate button
-    onSelect({ fabricName: "", fabricColour: "", uploadedFabricDescription: "", image: url, isUpload: true, analysing: true });
+    // The swatch FILE is the source of truth for the precise pipeline — the
+    // parent can generate immediately. The text description below is only
+    // needed if the creative (text-to-image) fallback runs, so the vision
+    // analysis is non-blocking.
+    onSelect({ fabricName: "", fabricColour: "", uploadedFabricDescription: "", image: url, file, isUpload: true, analysing: true });
 
     try {
       const base64 = await resizeToBase64(file);
       const description = await analyseWithAI(base64);
       setSwatchDescription(description);
-      onSelect({ fabricName: "", fabricColour: "", uploadedFabricDescription: description, image: url, isUpload: true, analysing: false });
+      onSelect({ fabricName: "", fabricColour: "", uploadedFabricDescription: description, image: url, file, isUpload: true, analysing: false });
     } catch {
       // Vision API unavailable — fall back to canvas colour extraction
       const colours = await extractColourHint(url);
@@ -162,7 +165,7 @@ export default function FabricSelector({ selectedFabric, onSelect }) {
         ? `${colours.join(", ")} toned fabric — add pattern details (e.g. chevron, stripe, plain weave)`
         : "";
       setSwatchDescription(hint);
-      onSelect({ fabricName: "", fabricColour: "", uploadedFabricDescription: hint, image: url, isUpload: true, analysing: false });
+      onSelect({ fabricName: "", fabricColour: "", uploadedFabricDescription: hint, image: url, file, isUpload: true, analysing: false });
     } finally {
       setIsAnalysing(false);
     }
@@ -171,7 +174,7 @@ export default function FabricSelector({ selectedFabric, onSelect }) {
   const handleSwatchDescriptionChange = (val) => {
     setSwatchDescription(val);
     if (uploadedPreview) {
-      onSelect({ fabricName: "", fabricColour: "", uploadedFabricDescription: val, image: uploadedPreview, isUpload: true, analysing: false });
+      onSelect({ fabricName: "", fabricColour: "", uploadedFabricDescription: val, image: uploadedPreview, file: uploadedFile, isUpload: true, analysing: false });
     }
   };
 
@@ -222,7 +225,9 @@ export default function FabricSelector({ selectedFabric, onSelect }) {
                   key={fabric.key}
                   type="button"
                   onClick={() =>
-                    onSelect({ key: fabric.key, fabricName: fabric.rangeName, fabricColour: fabric.colour || fabric.content, image: fabric.image, isUpload: false })
+                    // imagePath lets the parent fetch the real swatch pixels
+                    // for the precise pipeline
+                    onSelect({ key: fabric.key, fabricName: fabric.rangeName, fabricColour: fabric.colour || fabric.content, image: fabric.image, imagePath: fabric.image, isUpload: false })
                   }
                   className={cn(
                     "group relative overflow-hidden rounded-xl border-2 transition-all",
@@ -287,7 +292,7 @@ export default function FabricSelector({ selectedFabric, onSelect }) {
           <div>
             <label htmlFor="swatch-description" className="mb-1.5 block text-xs font-semibold text-slate-600">
               Fabric description{" "}
-              <span className="font-normal text-slate-400">(auto-filled by AI, edit if needed)</span>
+              <span className="font-normal text-slate-400">(only used by creative fallback mode — the swatch image itself drives the result)</span>
             </label>
 
             {isAnalysing ? (

@@ -1,7 +1,14 @@
 "use client";
 
-import { AlertCircle, Sparkles } from "lucide-react";
+import { AlertCircle, Clock, Sparkles, Wand2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import {
+  fetchCatalogFabricBlob,
+  generatePrecise,
+  isPreciseModeConfigured,
+  pingHealth,
+  resizeImageToBlob,
+} from "../../lib/visualizerApi";
 import { DAILY_LIMIT, IS_DEV, getRemainingGenerations, recordGeneration } from "../../lib/visualizerUtils";
 import { Button } from "../ui/button";
 import FabricSelector from "./FabricSelector";
@@ -13,9 +20,14 @@ export default function VisualizerPage() {
   const [selectedFabric, setSelectedFabric] = useState(null);
   const [selectedFurniture, setSelectedFurniture] = useState(null);
   const [customPrompt, setCustomPrompt] = useState("");
+  const [fabricScale, setFabricScale] = useState(1);
   const [imageUrl, setImageUrl] = useState(null);
+  const [maskUrl, setMaskUrl] = useState(null);
+  const [resultMode, setResultMode] = useState(null); // "precise" | "creative"
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [preciseFailed, setPreciseFailed] = useState(false);
+  const [warmingUp, setWarmingUp] = useState(false);
   const [remaining, setRemaining] = useState(DAILY_LIMIT);
 
   // Read localStorage only on the client after mount
@@ -23,14 +35,62 @@ export default function VisualizerPage() {
     setRemaining(getRemainingGenerations());
   }, []);
 
-  const canGenerate = selectedFurniture && (IS_DEV || remaining > 0) && !isLoading && !selectedFabric?.analysing;
+  // Wake the precise backend (free HF Spaces sleep when idle) and show a
+  // warming banner until it reports ready.
+  useEffect(() => {
+    if (!isPreciseModeConfigured()) return undefined;
+    let cancelled = false;
+    let timer;
+    const check = async () => {
+      try {
+        const health = await pingHealth();
+        if (cancelled) return;
+        if (health.status === "ok") {
+          setWarmingUp(false);
+          return;
+        }
+      } catch {
+        // Space asleep or still booting — keep polling
+      }
+      if (!cancelled) {
+        setWarmingUp(true);
+        timer = setTimeout(check, 10000);
+      }
+    };
+    check();
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, []);
 
-  const generate = async () => {
-    if (!canGenerate) return;
+  const canGenerate = selectedFurniture && (IS_DEV || remaining > 0) && !isLoading;
 
+  // Precise mode needs real pixels: a fabric image (upload or catalog pick)
+  // and either an uploaded furniture photo or a backend template id.
+  const canUsePrecise =
+    isPreciseModeConfigured() &&
+    Boolean(selectedFabric?.file || selectedFabric?.imagePath) &&
+    Boolean(selectedFurniture && (!selectedFurniture.isUpload || selectedFurniture.file));
+
+  const finishSuccess = (url, mode, mask) => {
+    // GenerationPanel clears the loading state once the <img> actually loads.
+    setImageUrl(url);
+    setResultMode(mode);
+    setMaskUrl(mask || null);
+    recordGeneration();
+    setRemaining(getRemainingGenerations());
+  };
+
+  // Original text-to-image pipeline (Pollinations FLUX). The fabric is only
+  // described in words here, so the pattern is approximate — kept as the
+  // fallback for when the precise backend is unavailable.
+  const generateCreative = async () => {
+    if (!selectedFurniture || isLoading) return;
     setIsLoading(true);
     setError(null);
-    setImageUrl(null); // clear previous image so spinner shows cleanly
+    setPreciseFailed(false);
+    setImageUrl(null);
 
     try {
       const res = await fetch("/api/visualize", {
@@ -47,21 +107,52 @@ export default function VisualizerPage() {
       });
 
       const data = await res.json();
-
       if (!res.ok || data.error) {
         throw new Error(data.error || "Generation failed.");
       }
-
-      // imageUrl is a Pollinations URL — the browser loads the image directly.
-      // GenerationPanel tracks when the img actually finishes loading.
-      setImageUrl(data.imageUrl);
-      recordGeneration();
-      setRemaining(getRemainingGenerations());
+      finishSuccess(data.imageUrl, "creative", null);
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
       setIsLoading(false);
     }
-    // Note: isLoading stays true here — GenerationPanel clears it via onImageLoad
+  };
+
+  // Precise pipeline: sends the actual fabric swatch and furniture photo to
+  // the segmentation + compositing backend, so the exact pattern, colour and
+  // scale are preserved and only the upholstered areas change.
+  const generatePreciseFlow = async () => {
+    setIsLoading(true);
+    setError(null);
+    setPreciseFailed(false);
+    setImageUrl(null);
+
+    try {
+      const fabricBlob = selectedFabric.file
+        ? await resizeImageToBlob(selectedFabric.file, 1024)
+        : await fetchCatalogFabricBlob(selectedFabric.imagePath);
+      const furnitureBlob = selectedFurniture.isUpload
+        ? await resizeImageToBlob(selectedFurniture.file, 1280)
+        : null;
+
+      const data = await generatePrecise({
+        furnitureBlob,
+        templateId: selectedFurniture.isUpload ? null : selectedFurniture.furnitureType,
+        fabricBlob,
+        fabricScale,
+        returnMask: IS_DEV,
+      });
+      finishSuccess(data.image, "precise", data.mask);
+    } catch (err) {
+      setError(err.message || "Something went wrong. Please try again.");
+      setPreciseFailed(true);
+      setIsLoading(false);
+    }
+  };
+
+  const generate = () => {
+    if (!canGenerate) return;
+    if (canUsePrecise) generatePreciseFlow();
+    else generateCreative();
   };
 
   const handleRegenerate = () => {
@@ -85,8 +176,8 @@ export default function VisualizerPage() {
                 <em className="font-serif not-italic text-blue-300">come alive</em>
               </h1>
               <p className="mt-4 max-w-xl text-sm leading-7 text-slate-300 sm:text-base">
-                Select a fabric from our catalog, pick a furniture piece, and let AI
-                generate a photorealistic visualisation in seconds.
+                Select a fabric from our catalog or upload your own swatch, pick a
+                furniture piece, and see the exact fabric mapped onto the upholstery.
               </p>
             </div>
 
@@ -113,9 +204,9 @@ export default function VisualizerPage() {
           </h3>
           <div className="grid gap-6 sm:grid-cols-3">
             {[
-              { step: "01", title: "Pick a Fabric", body: "Browse the Helmtex catalog or upload your own swatch image to use as the fabric source." },
-              { step: "02", title: "Choose Furniture", body: "Select one of 6 standard pieces or upload a photo of your own furniture with a description." },
-              { step: "03", title: "Generate & Save", body: "Our AI (Pollinations FLUX) builds a photorealistic image. Download it and share with your client." },
+              { step: "01", title: "Pick a Fabric", body: "Browse the Helmtex catalog or upload your own swatch image — the actual fabric pixels are used." },
+              { step: "02", title: "Choose Furniture", body: "Select one of 6 standard pieces or upload a photo of your own furniture. Only the upholstery changes." },
+              { step: "03", title: "Generate & Save", body: "The AI maps your exact fabric onto the upholstered areas — pattern, colour and scale preserved. Download and share." },
             ].map(({ step, title, body }) => (
               <div key={step} className="flex gap-4">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50 text-xs font-bold text-blue-600">
@@ -194,11 +285,26 @@ export default function VisualizerPage() {
                   </h2>
                 </div>
               </div>
-              <PromptInput value={customPrompt} onChange={setCustomPrompt} />
+              <PromptInput
+                value={customPrompt}
+                onChange={setCustomPrompt}
+                scale={fabricScale}
+                onScaleChange={setFabricScale}
+              />
             </div>
 
             {/* Generate button */}
             <div className="space-y-3">
+              {warmingUp && (
+                <div className="flex items-center gap-2 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3">
+                  <Clock className="h-4 w-4 shrink-0 animate-pulse text-blue-600" />
+                  <p className="text-sm font-medium text-blue-800">
+                    Warming up the visualizer (~1 min). First generation after a quiet
+                    spell takes a little longer.
+                  </p>
+                </div>
+              )}
+
               {remaining === 0 && (
                 <div className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
                   <AlertCircle className="h-4 w-4 shrink-0 text-amber-600" />
@@ -222,6 +328,17 @@ export default function VisualizerPage() {
                 <Sparkles className="mr-2 h-5 w-5" />
                 {isLoading ? "Generating…" : "Visualise on Furniture"}
               </Button>
+
+              {preciseFailed && !isLoading && (
+                <Button
+                  variant="outline"
+                  onClick={generateCreative}
+                  className="h-12 w-full rounded-2xl border-slate-300 text-sm font-semibold text-slate-700"
+                >
+                  <Wand2 className="mr-2 h-4 w-4" />
+                  Try creative mode instead (AI-imagined, pattern not exact)
+                </Button>
+              )}
             </div>
           </div>
 
@@ -243,6 +360,8 @@ export default function VisualizerPage() {
 
             <GenerationPanel
               imageUrl={imageUrl}
+              maskUrl={maskUrl}
+              mode={resultMode}
               isLoading={isLoading}
               error={error}
               onRegenerate={handleRegenerate}

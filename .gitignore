@@ -38,3 +38,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# visualizer backend — its own git repo, pushed to the Hugging Face Space
+/visualizer-backend/

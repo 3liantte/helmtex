@@ -1,9 +1,13 @@
 "use client";
 
-import { Download, RefreshCw, Sparkles, ImageOff } from "lucide-react";
+import { Download, RefreshCw, Sparkles, ImageOff, Layers } from "lucide-react";
+import { useState } from "react";
+import { IS_DEV } from "../../lib/visualizerUtils";
 import { Button } from "../ui/button";
 
-export default function GenerationPanel({ imageUrl, isLoading, error, onRegenerate, remaining, onImageLoad, onImageError }) {
+export default function GenerationPanel({ imageUrl, maskUrl, mode, isLoading, error, onRegenerate, remaining, onImageLoad, onImageError }) {
+  const [showMask, setShowMask] = useState(false);
+
   const handleSave = () => {
     if (!imageUrl) return;
     const a = document.createElement("a");
@@ -16,7 +20,7 @@ export default function GenerationPanel({ imageUrl, isLoading, error, onRegenera
 
   return (
     <div className="flex flex-col">
-      {/* Result area — 4:3 matches the 1024×768 Pollinations output */}
+      {/* Result area — object-contain handles both landscape and portrait results */}
       <div className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-[24px] border border-slate-200 bg-slate-50">
 
         {isLoading && (
@@ -26,7 +30,7 @@ export default function GenerationPanel({ imageUrl, isLoading, error, onRegenera
             </div>
             <div className="text-center">
               <p className="font-semibold text-slate-800">Generating your visualisation…</p>
-              <p className="mt-1 text-sm text-slate-500">Usually 15–40 seconds</p>
+              <p className="mt-1 text-sm text-slate-500">Usually 20–60 seconds</p>
             </div>
             <div className="flex gap-1.5">
               {[0, 1, 2].map((i) => (
@@ -78,9 +82,19 @@ export default function GenerationPanel({ imageUrl, isLoading, error, onRegenera
           <img
             src={imageUrl}
             alt="AI-generated fabric visualisation"
-            className={`h-full w-full rounded-[24px] object-cover transition-opacity duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
+            className={`h-full w-full rounded-[24px] object-contain transition-opacity duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
             onLoad={onImageLoad}
-            onError={() => onImageError?.("Pollinations could not generate the image. Please try again.")}
+            onError={() => onImageError?.("The image could not be loaded. Please try again.")}
+          />
+        )}
+
+        {/* Dev-only: overlay the upholstery mask returned by the backend */}
+        {IS_DEV && maskUrl && showMask && !isLoading && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={maskUrl}
+            alt="Upholstery mask (dev)"
+            className="pointer-events-none absolute inset-0 h-full w-full object-contain opacity-50 mix-blend-multiply"
           />
         )}
       </div>
@@ -90,8 +104,20 @@ export default function GenerationPanel({ imageUrl, isLoading, error, onRegenera
         <div className="mt-4 flex items-center justify-between gap-3">
           <p className="text-xs text-slate-400">
             {remaining} generation{remaining !== 1 ? "s" : ""} remaining today
+            {mode === "creative" && " · creative mode (pattern approximate)"}
           </p>
           <div className="flex gap-2">
+            {IS_DEV && maskUrl && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowMask((v) => !v)}
+                className="rounded-full border-slate-200"
+              >
+                <Layers className="h-3.5 w-3.5" />
+                {showMask ? "Hide mask" : "Show mask"}
+              </Button>
+            )}
             <Button
               variant="outline"
               size="sm"
@@ -115,8 +141,9 @@ export default function GenerationPanel({ imageUrl, isLoading, error, onRegenera
 
       {/* Disclaimer */}
       <p className="mt-4 text-center text-[11px] leading-5 text-slate-400">
-        AI-generated images are visual concepts only. Actual fabric colour and texture may differ.
-        Always request a physical sample before ordering.
+        {mode === "creative"
+          ? "Creative mode images are AI-imagined concepts — the fabric pattern is approximate. Always request a physical sample before ordering."
+          : "Visualisations are digital previews. Actual fabric colour and texture may differ — always request a physical sample before ordering."}
       </p>
     </div>
   );
