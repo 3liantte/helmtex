@@ -78,6 +78,12 @@ export const ServiceData = [
   //   backgroundImage: "/assets/customise.jpg",
   // },
   {
+    title: "Homegrown Outdoor",
+    content:
+      "Locally woven outdoor fabrics in earthy, sun-fast tones. Built to handle sun and weather while keeping a natural, textured character.",
+    backgroundImage: "/assets/ranges/HomeGrown/Homegrown-Shoowa-Jungle.webp",
+  },
+  {
     title: "Create Your Own",
     content:
       "Unleash your creativity with our Create Your Own collection. Personalize your fabrics to match your unique vision - choose your design, color palette, and textures to bring your custom projects to life.",
