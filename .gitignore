@@ -41,3 +41,6 @@ next-env.d.ts
 
 # visualizer backend — its own git repo, pushed to the Hugging Face Space
 /visualizer-backend/
+
+# in-browser visualizer test outputs (scripts/test-visualizer.mjs)
+/.viz-test/

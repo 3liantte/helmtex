@@ -1,14 +1,8 @@
 "use client";
 
-import { AlertCircle, Clock, Sparkles, Wand2 } from "lucide-react";
+import { AlertCircle, Sparkles, Wand2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-  fetchCatalogFabricBlob,
-  generatePrecise,
-  isPreciseModeConfigured,
-  pingHealth,
-  resizeImageToBlob,
-} from "../../lib/visualizerApi";
+import { generatePrecise, isPreciseModeAvailable } from "../../lib/visualizerApi";
 import { DAILY_LIMIT, IS_DEV, getRemainingGenerations, recordGeneration } from "../../lib/visualizerUtils";
 import { Button } from "../ui/button";
 import FabricSelector from "./FabricSelector";
@@ -25,9 +19,9 @@ export default function VisualizerPage() {
   const [maskUrl, setMaskUrl] = useState(null);
   const [resultMode, setResultMode] = useState(null); // "precise" | "creative"
   const [isLoading, setIsLoading] = useState(false);
+  const [progressText, setProgressText] = useState(null);
   const [error, setError] = useState(null);
   const [preciseFailed, setPreciseFailed] = useState(false);
-  const [warmingUp, setWarmingUp] = useState(false);
   const [remaining, setRemaining] = useState(DAILY_LIMIT);
 
   // Read localStorage only on the client after mount
@@ -35,41 +29,13 @@ export default function VisualizerPage() {
     setRemaining(getRemainingGenerations());
   }, []);
 
-  // Wake the precise backend (free HF Spaces sleep when idle) and show a
-  // warming banner until it reports ready.
-  useEffect(() => {
-    if (!isPreciseModeConfigured()) return undefined;
-    let cancelled = false;
-    let timer;
-    const check = async () => {
-      try {
-        const health = await pingHealth();
-        if (cancelled) return;
-        if (health.status === "ok") {
-          setWarmingUp(false);
-          return;
-        }
-      } catch {
-        // Space asleep or still booting — keep polling
-      }
-      if (!cancelled) {
-        setWarmingUp(true);
-        timer = setTimeout(check, 10000);
-      }
-    };
-    check();
-    return () => {
-      cancelled = true;
-      clearTimeout(timer);
-    };
-  }, []);
-
   const canGenerate = selectedFurniture && (IS_DEV || remaining > 0) && !isLoading;
 
-  // Precise mode needs real pixels: a fabric image (upload or catalog pick)
-  // and either an uploaded furniture photo or a backend template id.
+  // Precise mode runs fully in the browser (WebAssembly) and needs real
+  // pixels: a fabric image (upload or catalog pick) and either an uploaded
+  // furniture photo or a bundled template.
   const canUsePrecise =
-    isPreciseModeConfigured() &&
+    isPreciseModeAvailable() &&
     Boolean(selectedFabric?.file || selectedFabric?.imagePath) &&
     Boolean(selectedFurniture && (!selectedFurniture.isUpload || selectedFurniture.file));
 
@@ -117,35 +83,33 @@ export default function VisualizerPage() {
     }
   };
 
-  // Precise pipeline: sends the actual fabric swatch and furniture photo to
-  // the segmentation + compositing backend, so the exact pattern, colour and
-  // scale are preserved and only the upholstered areas change.
+  // Precise pipeline: segments the upholstery and composites the actual
+  // fabric swatch pixels — entirely in the browser — so the exact pattern,
+  // colour and scale are preserved and only the upholstered areas change.
   const generatePreciseFlow = async () => {
     setIsLoading(true);
+    setProgressText("Starting…");
     setError(null);
     setPreciseFailed(false);
     setImageUrl(null);
 
     try {
-      const fabricBlob = selectedFabric.file
-        ? await resizeImageToBlob(selectedFabric.file, 1024)
-        : await fetchCatalogFabricBlob(selectedFabric.imagePath);
-      const furnitureBlob = selectedFurniture.isUpload
-        ? await resizeImageToBlob(selectedFurniture.file, 1280)
-        : null;
-
       const data = await generatePrecise({
-        furnitureBlob,
+        furnitureFile: selectedFurniture.isUpload ? selectedFurniture.file : null,
         templateId: selectedFurniture.isUpload ? null : selectedFurniture.furnitureType,
-        fabricBlob,
+        fabricFile: selectedFabric.file || null,
+        fabricImagePath: selectedFabric.imagePath || null,
         fabricScale,
         returnMask: IS_DEV,
+        onProgress: setProgressText,
       });
       finishSuccess(data.image, "precise", data.mask);
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
       setPreciseFailed(true);
       setIsLoading(false);
+    } finally {
+      setProgressText(null);
     }
   };
 
@@ -295,16 +259,6 @@ export default function VisualizerPage() {
 
             {/* Generate button */}
             <div className="space-y-3">
-              {warmingUp && (
-                <div className="flex items-center gap-2 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3">
-                  <Clock className="h-4 w-4 shrink-0 animate-pulse text-blue-600" />
-                  <p className="text-sm font-medium text-blue-800">
-                    Warming up the visualizer (~1 min). First generation after a quiet
-                    spell takes a little longer.
-                  </p>
-                </div>
-              )}
-
               {remaining === 0 && (
                 <div className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
                   <AlertCircle className="h-4 w-4 shrink-0 text-amber-600" />
@@ -363,6 +317,7 @@ export default function VisualizerPage() {
               maskUrl={maskUrl}
               mode={resultMode}
               isLoading={isLoading}
+              progressText={progressText}
               error={error}
               onRegenerate={handleRegenerate}
               remaining={remaining}

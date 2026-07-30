@@ -5,7 +5,7 @@ import { useState } from "react";
 import { IS_DEV } from "../../lib/visualizerUtils";
 import { Button } from "../ui/button";
 
-export default function GenerationPanel({ imageUrl, maskUrl, mode, isLoading, error, onRegenerate, remaining, onImageLoad, onImageError }) {
+export default function GenerationPanel({ imageUrl, maskUrl, mode, isLoading, progressText, error, onRegenerate, remaining, onImageLoad, onImageError }) {
   const [showMask, setShowMask] = useState(false);
 
   const handleSave = () => {
@@ -30,7 +30,9 @@ export default function GenerationPanel({ imageUrl, maskUrl, mode, isLoading, er
             </div>
             <div className="text-center">
               <p className="font-semibold text-slate-800">Generating your visualisation…</p>
-              <p className="mt-1 text-sm text-slate-500">Usually 20–60 seconds</p>
+              <p className="mt-1 text-sm text-slate-500">
+                {progressText || "Runs right in your browser — usually 10–30 seconds"}
+              </p>
             </div>
             <div className="flex gap-1.5">
               {[0, 1, 2].map((i) => (

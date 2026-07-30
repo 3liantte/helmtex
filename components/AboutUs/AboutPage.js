@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: <explanation> */
 "use client";
 
 import { BadgeCheck, Boxes, Layers, Mail, ShieldCheck, Sparkles } from "lucide-react";
@@ -149,7 +150,7 @@ const AboutPage = () => {
       {/* ── Hero ── */}
       <section
         ref={heroRef}
-        className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 pb-24 pt-28 sm:pb-28 sm:pt-36 lg:pb-32 lg:pt-44"
+        className="relative overflow-hidden bg-gradient-to-br w-full from-slate-900 via-slate-800 to-blue-900 pb-24 pt-28"
       >
         {/* Background texture */}
         <Image
