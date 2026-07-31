@@ -6,6 +6,22 @@ const nextConfig = {
   // server bundle (its native onnxruntime-node binary breaks webpack), and
   // stub Node-only deps out of the client bundle.
   serverExternalPackages: ["@huggingface/transformers"],
+  // ...but "external" also means Next traces the whole package into every
+  // serverless function that reaches it, which blew the /visualizer function
+  // past Vercel's 250MB limit (transformers pulls onnxruntime-node +
+  // onnxruntime-web + a full set of per-platform sharp/libvips binaries).
+  // Nothing server-side ever loads it: the import lives behind
+  // isPreciseModeAvailable(), which is false without `window`, and the browser
+  // gets its own copy from the client bundle. So drop it from every trace.
+  // NB: only the copies under @huggingface/ are excluded — the top-level
+  // sharp/@img that Next's image optimizer needs stay put.
+  outputFileTracingExcludes: {
+    "**": [
+      "node_modules/@huggingface/**",
+      "node_modules/onnxruntime-node/**",
+      "node_modules/onnxruntime-web/**",
+    ],
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.alias = {
