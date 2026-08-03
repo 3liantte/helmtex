@@ -17,7 +17,7 @@ const Nav = () => {
     { name: "Products", link: "/products" },
     { name: "Finishes", link: "/finishes" },
     { name: "Gallery", link: "/gallery" },
-    { name: "Visualizer", link: "/visualizer" },
+    // { name: "Visualizer", link: "/visualizer" },
   ];
 
   const toggleMenu = () => setIsOpen(!isOpen);
