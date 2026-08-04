@@ -43,7 +43,11 @@ const nextConfig = {
         hostname: "image.pollinations.ai",
       },
     ],
-    formats: ["image/avif", "image/webp"],
+    // WebP only. The catalog swatches are already WebP, so re-encoding them to
+    // AVIF cost ~3.4s each (vs 0.33s) to save ~24% in bytes — slow enough that
+    // the fabric preview modal, which asks for the largest size, timed out and
+    // rendered blank. Resolution is unchanged, so the zoom lens is unaffected.
+    formats: ["image/webp"],
     minimumCacheTTL: 2678400,
   },
 };
